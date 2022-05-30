@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>Core.Compiler</RootNamespace>
+        <LangVersion>latest</LangVersion>
+        <AssemblyName>Core.Compiler</AssemblyName>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <PackageId>Core.Compiler</PackageId>
+        <Authors>Core.Compiler</Authors>
+        <Company>Core.Compiler</Company>
+        <Product>Core.Compiler</Product>
+    </PropertyGroup>
+
+</Project>
