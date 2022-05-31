@@ -2,15 +2,15 @@
 public class Error
 {
     public TextSpan TextSpan;
-    private string _message;
+    public readonly string Message;
     public Error(TextSpan span, string message)
     {
         TextSpan = span;
-        _message = message;
+        Message = message;
     }
 
     public override string ToString()
     {
-        return _message;
+        return Message;
     }
 }
