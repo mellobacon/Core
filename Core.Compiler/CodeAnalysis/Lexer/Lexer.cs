@@ -40,25 +40,37 @@ public class Lexer
         InvalidType
     }
     
-    private static object? GetValue(NumberType type, string text)
+    private object? GetValue(NumberType type, string text)
     {
         object? value = null;
 
-        switch (type)
+        if (type == NumberType.IntType)
         {
-            case NumberType.IntType when int.TryParse(text.Replace("_", ""), out int i):
+            if (int.TryParse(text.Replace("_", ""), out int i))
             {
                 value = i;
-                break;
             }
-            case NumberType.FloatType when float.TryParse(text.Replace("_", ""), out float f):
+            else
+            {
+                // report error
+                Errors.ReportInvalidNumberConversion(new TextSpan(_start, text.Length), text, typeof(int));
+            }
+        }
+        else if (type == NumberType.FloatType)
+        {
+            if (float.TryParse(text.Replace("_", ""), out float f))
             {
                 value = f;
-                break;
             }
-            case NumberType.InvalidType:
-            default:
-                break;
+            else
+            {
+                // report error
+                Errors.ReportInvalidNumberConversion(new TextSpan(_start, text.Length), text, typeof(float));
+            }
+        }
+        else
+        {
+            Errors.ReportInvalidToken(new TextSpan(_start, text.Length), text);
         }
 
         return value;
@@ -210,8 +222,7 @@ public class Lexer
         }
         int length = _position - _start;
         string text = _text.Substring(_start, length);
-        string parsedtext = suffix is null ? text : text.Replace(suffix, "");
-        object? value = GetValue(numberType, parsedtext);
+        object? value = GetValue(numberType, text);
         _type = value == null ? SyntaxTokenType.BadToken : SyntaxTokenType.NumberToken;
         _value = value;
         
