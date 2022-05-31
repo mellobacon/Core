@@ -58,9 +58,7 @@ public static class LexerTest
             ("\"string\"", SyntaxTokenType.StringToken),
             ("\"str ing\"", SyntaxTokenType.StringToken),
             ("\"THE FITNESS GRAM PACER TEST IS A-\"", SyntaxTokenType.StringToken),
-            ("'MULTI-STEP ACROBATIC TEST THAT INCREASES IN DIFF-'", SyntaxTokenType.StringToken),
             ("\")(**^%^&(*uyGYU5789324U3J\"", SyntaxTokenType.StringToken),
-            ("')(**^%^&(*uyGYU5789324U3J'", SyntaxTokenType.StringToken),
             ("1.2.3", SyntaxTokenType.BadToken),
             ("1000_", SyntaxTokenType.BadToken)
         };
