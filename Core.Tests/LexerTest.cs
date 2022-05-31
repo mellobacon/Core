@@ -33,6 +33,8 @@ public static class LexerTest
             ("123", SyntaxTokenType.NumberToken),
             ("1.23", SyntaxTokenType.NumberToken),
             ("1_000", SyntaxTokenType.NumberToken),
+            ("1.2.3", SyntaxTokenType.BadToken),
+            ("1000_", SyntaxTokenType.BadToken),
             ("100__000_______________000", SyntaxTokenType.NumberToken),
             ("+", SyntaxTokenType.PlusToken),
             ("-", SyntaxTokenType.MinusToken),
@@ -59,8 +61,6 @@ public static class LexerTest
             ("\"str ing\"", SyntaxTokenType.StringToken),
             ("\"THE FITNESS GRAM PACER TEST IS A-\"", SyntaxTokenType.StringToken),
             ("\")(**^%^&(*uyGYU5789324U3J\"", SyntaxTokenType.StringToken),
-            ("1.2.3", SyntaxTokenType.BadToken),
-            ("1000_", SyntaxTokenType.BadToken)
         };
         foreach ((string text, SyntaxTokenType type) in tokens)
         {
