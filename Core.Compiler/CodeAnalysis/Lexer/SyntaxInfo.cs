@@ -1,5 +1,5 @@
 ﻿namespace Core.Compiler.CodeAnalysis.Lexer;
-public static class SyntaxPrecedence
+public static class SyntaxInfo
 {
     public static int GetBinaryPrecedence(SyntaxTokenType type)
     {

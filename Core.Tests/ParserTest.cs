@@ -14,7 +14,7 @@ public static class ParserTest
         var types = (SyntaxTokenType[]) Enum.GetValues(typeof(SyntaxTokenType));
         foreach (SyntaxTokenType type in types)
         {
-            if (SyntaxPrecedence.GetBinaryPrecedence(type) > 0)
+            if (SyntaxInfo.GetBinaryPrecedence(type) > 0)
             {
                 yield return type;
             }
@@ -43,10 +43,10 @@ public static class ParserTest
     [MemberData(nameof(BinaryOpData))]
     public static void Parser_Honors_Precedence(SyntaxTokenType type1, SyntaxTokenType type2)
     {
-        int typeprecedence1 = SyntaxPrecedence.GetBinaryPrecedence(type1);
-        int typeprecedence2 = SyntaxPrecedence.GetBinaryPrecedence(type2);
-        string? typetext1 = SyntaxPrecedence.GetText(type1);
-        string? typetext2 = SyntaxPrecedence.GetText(type2);
+        int typeprecedence1 = SyntaxInfo.GetBinaryPrecedence(type1);
+        int typeprecedence2 = SyntaxInfo.GetBinaryPrecedence(type2);
+        string? typetext1 = SyntaxInfo.GetText(type1);
+        string? typetext2 = SyntaxInfo.GetText(type2);
 
         var text = $"1 {typetext1} 2 {typetext2} 3";
         ExpressionSyntax expression = ParseExpression(text);
