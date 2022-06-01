@@ -57,9 +57,22 @@ public class Parser
         return ParseBinaryExpression();
     }
 
+    private ExpressionSyntax ParseUnaryExpression(int precedence = 0)
+    {
+        int currentPrecedence = SyntaxInfo.GetUnaryPrecedence(Current.Type);
+        if (currentPrecedence != 0 && currentPrecedence >= precedence)
+        {
+            SyntaxToken op = NextToken();
+            ExpressionSyntax operand = ParseBinaryExpression(currentPrecedence);
+            return new UnaryExpression(op, operand);
+        }
+
+        return ParseLiteralExpression();
+    }
+
     private ExpressionSyntax ParseBinaryExpression(int precedence = 0)
     {
-        ExpressionSyntax left = ParseLiteralExpression();
+        ExpressionSyntax left = ParseUnaryExpression(precedence);
         while (true)
         {
             int currentPrecedence = SyntaxInfo.GetBinaryPrecedence(Current.Type);

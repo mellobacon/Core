@@ -29,6 +29,7 @@ public enum SyntaxTokenType
     VariableKeyword,
         
     BinaryExpression,
+    UnaryExpression,
     LiteralExpression,
     GroupedExpression,
     AssignmentExpression,

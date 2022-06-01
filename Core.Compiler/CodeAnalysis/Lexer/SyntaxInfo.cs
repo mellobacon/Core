@@ -1,6 +1,14 @@
 ﻿namespace Core.Compiler.CodeAnalysis.Lexer;
 public static class SyntaxInfo
 {
+    public static int GetUnaryPrecedence(SyntaxTokenType type)
+    {
+        return type switch
+        {
+            SyntaxTokenType.MinusToken => 7,
+            _ => 0
+        };
+    }
     public static int GetBinaryPrecedence(SyntaxTokenType type)
     {
         // follows pemdas

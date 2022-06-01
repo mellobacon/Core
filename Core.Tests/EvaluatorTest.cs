@@ -51,7 +51,8 @@ public static class EvaluatorTest
             ("False || True", true),
             ("True && True", true),
             ("True && False", false),
-            ("\"string\"", "string")
+            ("\"string\"", "string"),
+            ("-2", -2)
         };
         foreach ((string text, object value) in evals)
         {

@@ -20,6 +20,7 @@ public class Evaluator
     {
         return root.BoundType switch
         {
+            BoundType.UnaryExpression => EvaluateUnaryExpression(root),
             BoundType.BinaryExpression => EvaluateBinaryExpression(root),
             BoundType.LiteralExpression => EvaluateLiteralExpression(root),
             _ => null
@@ -73,6 +74,20 @@ public class Evaluator
             BinaryOperatorType.Equal => Equals(left, right),
             BinaryOperatorType.Exponent => Math.Pow((int)left, (int)right),
             _ => throw new Exception($"Unexpected binary operator {b.Op}")
+        };
+    }
+
+    private object? EvaluateUnaryExpression(IBoundExpression root)
+    {
+        if (root is not UnaryBoundExpression u) return null;
+
+        object? operand = EvaluateExpression(u.Operand);
+        if (operand is null) return null;
+
+        return u.Op.BoundType switch
+        {
+            UnaryOperatorType.Negation => -(int)operand,
+            _ => throw new Exception($"Unexpected unary operator {u.Op}")
         };
     }
 

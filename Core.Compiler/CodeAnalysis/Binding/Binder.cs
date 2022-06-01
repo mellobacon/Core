@@ -14,9 +14,10 @@ public class Binder
         return syntax.Type switch
         {
             SyntaxTokenType.LiteralExpression => BindLiteralExpression((LiteralExpression)syntax),
+            SyntaxTokenType.UnaryExpression => BindUnaryExpression((UnaryExpression)syntax),
             SyntaxTokenType.BinaryExpression => BindBinaryExpression((BinaryExpression)syntax),
             SyntaxTokenType.GroupedExpression => BindGroupedExpression((GroupedExpression)syntax),
-            _ => throw new Exception($"Unexpected syntax {syntax.Type}")
+            _ => throw new Exception($"Unexpected syntax [{syntax.Type}] (Binder)")
         };
     }
 
@@ -37,6 +38,19 @@ public class Binder
             return left;
         }
         return new BinaryBoundExpression(left, op, right);
+    }
+
+    private IBoundExpression BindUnaryExpression(UnaryExpression syntax)
+    {
+        IBoundExpression operand = BindExpression(syntax);
+        UnaryBoundOperator? op = UnaryBoundOperator.GetOp(syntax.Type, operand.Type);
+        if (op is null)
+        {
+            // report error
+            return operand;
+        }
+
+        return new UnaryBoundExpression(op, operand);
     }
 
     private IBoundExpression BindGroupedExpression(GroupedExpression syntax)

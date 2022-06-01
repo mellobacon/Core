@@ -30,6 +30,7 @@ public static class LexerTest
         var tokens = new (string text, SyntaxTokenType type)[]
         {
             ("1", SyntaxTokenType.NumberToken),
+            ("-2", SyntaxTokenType.NumberToken),
             ("123", SyntaxTokenType.NumberToken),
             ("1.23", SyntaxTokenType.NumberToken),
             ("1_000", SyntaxTokenType.NumberToken),

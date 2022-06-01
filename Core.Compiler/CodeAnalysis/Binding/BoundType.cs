@@ -2,5 +2,6 @@
 public enum BoundType
 {
     BinaryExpression,
+    UnaryExpression,
     LiteralExpression
 }

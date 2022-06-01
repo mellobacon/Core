@@ -88,6 +88,18 @@ public class Lexer
             case '\0':
                 _type = SyntaxTokenType.EofToken;
                 break;
+            case var _ when char.IsDigit(Current) || Current is '.' || Current is '-' && char.IsDigit(GetToken(1)):
+                text = LexNumber();
+                break;
+            case var _ when char.IsWhiteSpace(Current):
+                text = LexWhiteSpace();
+                break;
+            case var _ when char.IsLetter(Current) || Current is '_':
+                text = LexKeyword();
+                break;
+            case var _ when Current is '"':
+                text = LexString();
+                break;
             case '+':
                 _type = SyntaxTokenType.PlusToken;
                 Advance(1);
@@ -173,19 +185,6 @@ public class Lexer
                 _type = SyntaxTokenType.ClosedParenToken;
                 Advance(1);
                 break;
-            case var _ when char.IsDigit(Current) || Current is '.':
-                //LexNumber();
-                text = LexNumber();
-                break;
-            case var _ when char.IsWhiteSpace(Current):
-                text = LexWhiteSpace();
-                break;
-            case var _ when char.IsLetter(Current) || Current is '_':
-                text = LexKeyword();
-                break;
-            case var _ when Current is '"':
-                text = LexString();
-                break;
             default:
                 Errors.ReportBadCharacter(Current, _position);
                 Advance(1);
@@ -204,13 +203,13 @@ public class Lexer
     {
         var numberType = NumberType.IntType;
         // continues getting the number or valid number character until there isn't another one to read
-        while (char.IsDigit(Current) || Current is '_' or '.')
+        while (char.IsDigit(Current) || Current is '_' or '.' or '-')
         {
             if (Current is '.') numberType = NumberType.FloatType;
             Advance(1);
             
             // a number cannot end with '.'(31.) or '_'(1000_)
-            if (Current is '_' or '.' && GetToken(1) is not '_' && !char.IsDigit(GetToken(1)))
+            if (Current is '_' or '.' or '-' && GetToken(1) is not '_' && !char.IsDigit(GetToken(1)))
             {
                 numberType = NumberType.InvalidType;
             }
