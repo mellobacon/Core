@@ -192,9 +192,9 @@ public class Lexer
                 break;
         }
         
-        if (SyntaxPrecedence.GetText(_type) is not null)
+        if (SyntaxInfo.GetText(_type) is not null)
         {
-            text = SyntaxPrecedence.GetText(_type);
+            text = SyntaxInfo.GetText(_type);
         }
 
         return new SyntaxToken(text, _value, _type, _position);
@@ -203,7 +203,6 @@ public class Lexer
     private string LexNumber()
     {
         var numberType = NumberType.IntType;
-        string? suffix = null;
         // continues getting the number or valid number character until there isn't another one to read
         while (char.IsDigit(Current) || Current is '_' or '.')
         {
@@ -244,7 +243,7 @@ public class Lexer
         int length = _position - _start;
         string text = _text.Substring(_start, length);
         _type = SyntaxTokenType.StringToken;
-        _value = text;
+        _value = text[1..^1];
         return text;
     }
 
@@ -256,7 +255,7 @@ public class Lexer
         }
         int length = _position - _start;
         string text = _text.Substring(_start, length);
-        _type = SyntaxPrecedence.GetKeywordType(text);
+        _type = SyntaxInfo.GetKeywordType(text);
         _value = _type switch
         {
             SyntaxTokenType.TrueKeyword => true,

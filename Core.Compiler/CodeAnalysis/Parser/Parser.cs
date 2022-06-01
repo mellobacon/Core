@@ -62,7 +62,7 @@ public class Parser
         ExpressionSyntax left = ParseLiteralExpression();
         while (true)
         {
-            int currentPrecedence = SyntaxPrecedence.GetBinaryPrecedence(Current.Type);
+            int currentPrecedence = SyntaxInfo.GetBinaryPrecedence(Current.Type);
             if (currentPrecedence.Equals(0) || currentPrecedence <= precedence)
             {
                 break;
@@ -93,6 +93,9 @@ public class Parser
             case SyntaxTokenType.VariableToken:
                 SyntaxToken variabletoken = MatchToken(SyntaxTokenType.VariableToken);
                 return new LiteralExpression(variabletoken, variabletoken.Value);
+            case SyntaxTokenType.StringToken:
+                SyntaxToken stringtoken = MatchToken(SyntaxTokenType.StringToken);
+                return new LiteralExpression(stringtoken, stringtoken.Value);
             default:
                 SyntaxToken number = MatchToken(SyntaxTokenType.NumberToken);
                 return new LiteralExpression(number, number.Value);
