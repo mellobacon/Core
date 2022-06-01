@@ -54,6 +54,7 @@ public static class LexerTest
             ("==", SyntaxTokenType.EqualsEqualsToken),
             ("False", SyntaxTokenType.FalseKeyword),
             ("True", SyntaxTokenType.TrueKeyword),
+            ("var", SyntaxTokenType.VariableKeyword),
             ("_Test", SyntaxTokenType.VariableToken),
             ("_1000", SyntaxTokenType.VariableToken),
             ("myVar", SyntaxTokenType.VariableToken),

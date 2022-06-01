@@ -15,6 +15,12 @@ public static class EvaluatorTest
             ("1.5", 1.5f),
             ("0.6 + 0.1", 0.70000005f), // smh float point
             ("1 + 0.5", 1.5f),
+            ("5 - 2", 3),
+            ("5.9 - 2.3", 3.6000001f),
+            ("5.0 * 5.0", 25f),
+            ("10.0 / 5.0", 2f),
+            ("6 % 2", 0),
+            ("6.2 % 3.2", 2.9999998f),
             ("2^2", 4d),
             ("0.5^2", 0.25),
             ("1_000", 1000),
@@ -28,6 +34,10 @@ public static class EvaluatorTest
             ("9 > 1", true),
             ("1.5 > 3", false),
             ("0.6 < 0.7", true),
+            ("5 >= 5", true),
+            ("5 <= 4", false),
+            ("5.5 >= 5.2", true),
+            ("5.0 <= 4.9", false),
             ("5 <= 5", true),
             ("25 >= 63", false),
             ("(1 + 2) < 5", true),
@@ -40,7 +50,8 @@ public static class EvaluatorTest
             ("True", true),
             ("False || True", true),
             ("True && True", true),
-            ("True && False", false)
+            ("True && False", false),
+            ("\"string\"", "string")
         };
         foreach ((string text, object value) in evals)
         {
