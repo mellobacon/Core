@@ -23,8 +23,15 @@ public class Evaluator
             BoundType.UnaryExpression => EvaluateUnaryExpression(root),
             BoundType.BinaryExpression => EvaluateBinaryExpression(root),
             BoundType.LiteralExpression => EvaluateLiteralExpression(root),
+            BoundType.AssignmentExpression => EvaluateAssignmentExpression(root),
             _ => null
         };
+    }
+
+    private object? EvaluateAssignmentExpression(IBoundExpression root)
+    {
+        if (root is not AssignmentBoundExpression a) return null;
+        return EvaluateExpression(a.Expression);
     }
 
     private object? EvaluateBinaryExpression(IBoundExpression root)

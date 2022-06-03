@@ -4,21 +4,21 @@ using Core.Compiler.CodeAnalysis.Lexer;
 namespace Core.Compiler.CodeAnalysis.Parser.Expressions;
 public class AssignmentExpression : ExpressionSyntax
 {
-    private readonly SyntaxToken _variableToken;
+    public readonly SyntaxToken VariableToken;
     private readonly SyntaxToken _equalsToken;
-    private readonly ExpressionSyntax _expression;
+    public readonly ExpressionSyntax Expression;
     public AssignmentExpression(SyntaxToken variableToken, SyntaxToken equalsToken, ExpressionSyntax expression)
     {
-        _variableToken = variableToken;
-        _expression = expression;
+        VariableToken = variableToken;
+        Expression = expression;
         _equalsToken = equalsToken;
     }
 
     public override SyntaxTokenType Type => SyntaxTokenType.AssignmentExpression;
     public override IEnumerable<SyntaxNode> GetChildren()
     {
-        yield return _variableToken;
+        yield return VariableToken;
         yield return _equalsToken;
-        yield return _expression;
+        yield return Expression;
     }
 }

@@ -27,7 +27,7 @@ public enum SyntaxTokenType
     TrueKeyword,
     FalseKeyword,
     VariableKeyword,
-        
+
     BinaryExpression,
     UnaryExpression,
     LiteralExpression,

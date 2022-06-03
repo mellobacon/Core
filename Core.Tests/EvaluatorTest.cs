@@ -12,6 +12,7 @@ public static class EvaluatorTest
         var evals = new (string text, object value)[]
         {
             ("1", 1),
+            ("-2", -2),
             ("1.5", 1.5f),
             ("0.6 + 0.1", 0.70000005f), // smh float point
             ("1 + 0.5", 1.5f),
@@ -52,7 +53,7 @@ public static class EvaluatorTest
             ("True && True", true),
             ("True && False", false),
             ("\"string\"", "string"),
-            ("-2", -2)
+            ("x = 5", 5)
         };
         foreach ((string text, object value) in evals)
         {
@@ -75,6 +76,7 @@ public static class EvaluatorTest
             ("$", "Heehoo bad character: $ is not a valid character"),
             ("2||2", "Heehoo bad binary operator || cant be applied to System.Int32 and System.Int32"),
             ("100_", "Heehoo invalid token 100_"),
+            ("-False", "Heehoo bad unary operator - cant be applied to System.Boolean")
         };
         foreach ((string text, string error) in evals)
         {

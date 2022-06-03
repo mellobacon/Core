@@ -41,7 +41,7 @@ public static class ParserTest
 
     [Theory]
     [MemberData(nameof(BinaryOpData))]
-    public static void Parser_Honors_Precedence(SyntaxTokenType type1, SyntaxTokenType type2)
+    public static void Parser_Honors_Binary_Precedence(SyntaxTokenType type1, SyntaxTokenType type2)
     {
         int typeprecedence1 = SyntaxInfo.GetBinaryPrecedence(type1);
         int typeprecedence2 = SyntaxInfo.GetBinaryPrecedence(type2);
@@ -79,5 +79,52 @@ public static class ParserTest
                     e.AssertNode(SyntaxTokenType.LiteralExpression);
                         e.AssertToken(SyntaxTokenType.NumberToken, "3");   
         }
+    }
+    
+    private static IEnumerable<SyntaxTokenType> UnaryOpTypes()
+    {
+        var types = (SyntaxTokenType[]) Enum.GetValues(typeof(SyntaxTokenType));
+        foreach (SyntaxTokenType type in types)
+        {
+            if (SyntaxInfo.GetUnaryPrecedence(type) > 0)
+            {
+                yield return type;
+            }
+        }
+    }
+    
+    private static IEnumerable UnaryOpData()
+    {
+        foreach (SyntaxTokenType op in UnaryOpTypes())
+        {
+            yield return new object[] { op };
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(UnaryOpData))]
+    public static void Parser_Honors_Unary_Precedence(SyntaxTokenType type)
+    {
+        int unaryprecedence = SyntaxInfo.GetUnaryPrecedence(type);
+        string? typetext = SyntaxInfo.GetText(type);
+        var numbertext = $"{typetext}1";
+        ExpressionSyntax numberedexpression = ParseExpression(numbertext);
+        using var e = new AssertingNumerator(numberedexpression);
+        e.AssertNode(SyntaxTokenType.UnaryExpression);
+            e.AssertToken(type, typetext);
+            e.AssertNode(SyntaxTokenType.LiteralExpression);
+                e.AssertToken(SyntaxTokenType.NumberToken, "1");
+    }
+
+    [Fact]
+    public static void Parser_Parses_Assignments()
+    {
+        ExpressionSyntax expression = ParseExpression("x = 5");
+        using var e = new AssertingNumerator(expression);
+        e.AssertNode(SyntaxTokenType.AssignmentExpression);
+            e.AssertToken(SyntaxTokenType.VariableToken, "x");
+            e.AssertToken(SyntaxTokenType.EqualsToken, "=");
+            e.AssertNode(SyntaxTokenType.LiteralExpression);
+                e.AssertToken(SyntaxTokenType.NumberToken, "5");
     }
 }

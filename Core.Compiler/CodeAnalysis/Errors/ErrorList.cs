@@ -46,6 +46,12 @@ public class ErrorList
         string message = $"Heehoo bad binary operator {op} cant be applied to {left} and {right}";
         _errors.Add(new Error(span, message));
     }
+    
+    public void ReportUndefinedUnaryOperator(TextSpan span, string? op, Type operand)
+    {
+        string message = $"Heehoo bad unary operator {op} cant be applied to {operand}";
+        _errors.Add(new Error(span, message));
+    }
 
     public void ReportInvalidToken(TextSpan span, string token)
     {

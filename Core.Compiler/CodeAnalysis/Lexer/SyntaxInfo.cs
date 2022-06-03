@@ -37,7 +37,7 @@ public static class SyntaxInfo
         {
             "True" => SyntaxTokenType.TrueKeyword,
             "False" => SyntaxTokenType.FalseKeyword,
-            "var" => SyntaxTokenType.VariableKeyword,
+            "let" => SyntaxTokenType.VariableKeyword,
             _ => SyntaxTokenType.VariableToken
         };
     }

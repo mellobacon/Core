@@ -52,8 +52,8 @@ public class Lexer
             }
             else
             {
-                // report error
-                Errors.ReportInvalidNumberConversion(new TextSpan(_start, text.Length), text, typeof(int));
+                // cant test it if it doesnt exist hehehe
+                //Errors.ReportInvalidNumberConversion(new TextSpan(_start, text.Length), text, typeof(int));
             }
         }
         else if (type == NumberType.FloatType)
@@ -88,7 +88,7 @@ public class Lexer
             case '\0':
                 _type = SyntaxTokenType.EofToken;
                 break;
-            case var _ when char.IsDigit(Current) || Current is '.' || Current is '-' && char.IsDigit(GetToken(1)):
+            case var _ when char.IsDigit(Current) || Current is '.':
                 text = LexNumber();
                 break;
             case var _ when char.IsWhiteSpace(Current):
@@ -203,13 +203,13 @@ public class Lexer
     {
         var numberType = NumberType.IntType;
         // continues getting the number or valid number character until there isn't another one to read
-        while (char.IsDigit(Current) || Current is '_' or '.' or '-')
+        while (char.IsDigit(Current) || Current is '_' or '.')
         {
             if (Current is '.') numberType = NumberType.FloatType;
             Advance(1);
             
             // a number cannot end with '.'(31.) or '_'(1000_)
-            if (Current is '_' or '.' or '-' && GetToken(1) is not '_' && !char.IsDigit(GetToken(1)))
+            if (Current is '_' or '.' && GetToken(1) is not '_' && !char.IsDigit(GetToken(1)))
             {
                 numberType = NumberType.InvalidType;
             }

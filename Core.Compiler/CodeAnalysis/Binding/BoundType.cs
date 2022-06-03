@@ -3,5 +3,6 @@ public enum BoundType
 {
     BinaryExpression,
     UnaryExpression,
-    LiteralExpression
+    LiteralExpression,
+    AssignmentExpression,
 }

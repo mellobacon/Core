@@ -17,6 +17,7 @@ public class Binder
             SyntaxTokenType.UnaryExpression => BindUnaryExpression((UnaryExpression)syntax),
             SyntaxTokenType.BinaryExpression => BindBinaryExpression((BinaryExpression)syntax),
             SyntaxTokenType.GroupedExpression => BindGroupedExpression((GroupedExpression)syntax),
+            SyntaxTokenType.AssignmentExpression => BindAssignmentExpression((AssignmentExpression)syntax),
             _ => throw new Exception($"Unexpected syntax [{syntax.Type}] (Binder)")
         };
     }
@@ -42,15 +43,24 @@ public class Binder
 
     private IBoundExpression BindUnaryExpression(UnaryExpression syntax)
     {
-        IBoundExpression operand = BindExpression(syntax);
-        UnaryBoundOperator? op = UnaryBoundOperator.GetOp(syntax.Type, operand.Type);
+        IBoundExpression operand = BindExpression(syntax.Expression);
+        UnaryBoundOperator? op = UnaryBoundOperator.GetOp(syntax.Op.Type, operand.Type);
         if (op is null)
         {
-            // report error
+            Errors.ReportUndefinedUnaryOperator(syntax.Op.TextSpan, syntax.Op.Text, operand.Type);
             return operand;
         }
 
         return new UnaryBoundExpression(op, operand);
+    }
+
+    private IBoundExpression BindAssignmentExpression(AssignmentExpression syntax)
+    {
+        string name = syntax.VariableToken.Text!;
+        IBoundExpression expression = BindExpression(syntax.Expression);
+        var variable = new Variable(name, expression.Type);
+
+        return new AssignmentBoundExpression(variable, expression);
     }
 
     private IBoundExpression BindGroupedExpression(GroupedExpression syntax)
