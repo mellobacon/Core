@@ -138,12 +138,13 @@ public class Repl
         string marker = isLast ? "└──" : "├──";
         Console.Write(indent);
         Console.Write(marker);
-
-        // TODO: Fix tree printing for new stuff
+        
         // Print the node
         switch (node.Type)
         {
-            case SyntaxTokenType.BinaryExpression:
+            case SyntaxTokenType.BinaryExpression: 
+            case SyntaxTokenType.UnaryExpression: 
+            case SyntaxTokenType.AssignmentExpression:
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.Write(node.Type);
                 Console.ResetColor();
@@ -157,6 +158,15 @@ public class Repl
             case SyntaxTokenType.SlashToken:
             case SyntaxTokenType.PlusToken:
             case SyntaxTokenType.MinusToken:
+            case SyntaxTokenType.ModuloToken: 
+            case SyntaxTokenType.LessThanToken: 
+            case SyntaxTokenType.MoreThanToken: 
+            case SyntaxTokenType.LessEqualsToken: 
+            case SyntaxTokenType.MoreEqualsToken: 
+            case SyntaxTokenType.EqualsToken: 
+            case SyntaxTokenType.DoublePipeToken: 
+            case SyntaxTokenType.DoubleAmpersandToken: 
+            case SyntaxTokenType.EqualsEqualsToken:
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.Write(node.Type);
                 Console.ResetColor();
@@ -168,10 +178,18 @@ public class Repl
         }
 
         // Basically for printing numbers
-        if (node is SyntaxToken token && token.Value != null)
+        if (node is SyntaxToken token)
         {
-            Console.Write(" ");
-            Console.Write(token.Value);
+            if (token.Value is not null)
+            {
+                Console.Write(" ");
+                Console.Write(token.Value);
+            }
+            else if (token.Text is not null)
+            {
+                Console.Write(" ");
+                Console.Write(token.Text);
+            }
         }
 
         Console.WriteLine();
