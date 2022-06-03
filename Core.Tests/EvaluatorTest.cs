@@ -53,7 +53,8 @@ public static class EvaluatorTest
             ("True && True", true),
             ("True && False", false),
             ("\"string\"", "string"),
-            ("x = 5", 5)
+            ("x = 5", 5),
+            ("x = (100 - 10)", 90)
         };
         foreach ((string text, object value) in evals)
         {
