@@ -33,6 +33,7 @@ public enum SyntaxTokenType
     LiteralExpression,
     GroupedExpression,
     AssignmentExpression,
+    VariableExpression,
 
     WhiteSpaceToken,
     BadToken,

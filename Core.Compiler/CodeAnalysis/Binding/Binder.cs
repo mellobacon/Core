@@ -18,6 +18,7 @@ public class Binder
             SyntaxTokenType.BinaryExpression => BindBinaryExpression((BinaryExpression)syntax),
             SyntaxTokenType.GroupedExpression => BindGroupedExpression((GroupedExpression)syntax),
             SyntaxTokenType.AssignmentExpression => BindAssignmentExpression((AssignmentExpression)syntax),
+            SyntaxTokenType.VariableExpression => BindVariableExpression((VariableExpression)syntax),
             _ => throw new Exception($"Unexpected syntax [{syntax.Type}] (Binder)")
         };
     }
@@ -59,8 +60,22 @@ public class Binder
         string name = syntax.VariableToken.Text!;
         IBoundExpression expression = BindExpression(syntax.Expression);
         var variable = new Variable(name, expression.Type);
+        if (Variables.GetVariable(name) is null)
+        {
+            Variables.AddVariable(variable);
+        }
 
         return new AssignmentBoundExpression(variable, expression);
+    }
+
+    private IBoundExpression BindVariableExpression(VariableExpression syntax)
+    {
+        string? name = syntax.VariableToken.Text;
+        Variable? variable = Variables.GetVariable(name);
+
+        if (variable is null) return new LiteralBoundExpression(0);
+
+        return new VariableBoundExpression(variable);
     }
 
     private IBoundExpression BindGroupedExpression(GroupedExpression syntax)

@@ -105,7 +105,7 @@ public class Parser
                 return new LiteralExpression(keywordtoken, value);
             case SyntaxTokenType.VariableToken:
                 SyntaxToken variabletoken = MatchToken(SyntaxTokenType.VariableToken);
-                return new LiteralExpression(variabletoken, variabletoken.Value);
+                return new VariableExpression(variabletoken);
             case SyntaxTokenType.StringToken:
                 SyntaxToken stringtoken = MatchToken(SyntaxTokenType.StringToken);
                 return new LiteralExpression(stringtoken, stringtoken.Value);

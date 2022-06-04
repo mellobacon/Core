@@ -5,4 +5,5 @@ public enum BoundType
     UnaryExpression,
     LiteralExpression,
     AssignmentExpression,
+    VariableExpression,
 }

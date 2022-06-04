@@ -5,8 +5,8 @@ namespace Core.Compiler.CodeAnalysis;
 
 public class Variable
 {
-    private string Name { get; }
-    private Type Type { get; }
+    public string Name { get; }
+    public Type Type { get; }
     public Variable(string varName, Type resultType)
     {
         Name = varName;

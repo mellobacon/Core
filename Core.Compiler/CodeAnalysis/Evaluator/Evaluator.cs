@@ -24,6 +24,7 @@ public class Evaluator
             BoundType.BinaryExpression => EvaluateBinaryExpression(root),
             BoundType.LiteralExpression => EvaluateLiteralExpression(root),
             BoundType.AssignmentExpression => EvaluateAssignmentExpression(root),
+            BoundType.VariableExpression => EvaluateVariableExpression(root),
             _ => null
         };
     }
@@ -31,7 +32,10 @@ public class Evaluator
     private object? EvaluateAssignmentExpression(IBoundExpression root)
     {
         if (root is not AssignmentBoundExpression a) return null;
-        return EvaluateExpression(a.Expression);
+        object? value = EvaluateExpression(a.Expression);
+        Variables.SetVariable(a.Variable, value);
+
+        return value;
     }
 
     private object? EvaluateBinaryExpression(IBoundExpression root)
@@ -96,6 +100,12 @@ public class Evaluator
             UnaryOperatorType.Negation => -(int)operand,
             _ => throw new Exception($"Unexpected unary operator {u.Op}")
         };
+    }
+
+    private object? EvaluateVariableExpression(IBoundExpression root)
+    {
+        if (root is not VariableBoundExpression v) return null;
+        return Variables.GetVariableValue(v.Variable.Name);
     }
 
     private object? EvaluateLiteralExpression(IBoundExpression root)
