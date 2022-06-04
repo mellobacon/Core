@@ -127,4 +127,13 @@ public static class ParserTest
             e.AssertNode(SyntaxTokenType.LiteralExpression);
                 e.AssertToken(SyntaxTokenType.NumberToken, "5");
     }
+
+    [Fact]
+    public static void Parser_Parses_Variables()
+    {
+        ExpressionSyntax expression = ParseExpression("x");
+        using var e = new AssertingNumerator(expression);
+        e.AssertNode(SyntaxTokenType.VariableExpression);
+            e.AssertToken(SyntaxTokenType.VariableToken, "x");
+    }
 }
