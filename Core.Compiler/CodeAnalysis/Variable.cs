@@ -1,5 +1,4 @@
 ﻿using System;
-using Core.Compiler.CodeAnalysis.Lexer;
 
 namespace Core.Compiler.CodeAnalysis;
 

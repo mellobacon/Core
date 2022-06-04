@@ -105,7 +105,6 @@ public static class ParserTest
     [MemberData(nameof(UnaryOpData))]
     public static void Parser_Honors_Unary_Precedence(SyntaxTokenType type)
     {
-        int unaryprecedence = SyntaxInfo.GetUnaryPrecedence(type);
         string? typetext = SyntaxInfo.GetText(type);
         var numbertext = $"{typetext}1";
         ExpressionSyntax numberedexpression = ParseExpression(numbertext);

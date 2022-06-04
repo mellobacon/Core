@@ -4,6 +4,7 @@ using System.Linq;
 using Core.Compiler.CodeAnalysis.Lexer;
 
 namespace Core.Compiler.CodeAnalysis.Errors;
+// TODO: Make the error messages less heehoo
 public class ErrorList
 {
     private readonly List<Error> _errors = new();

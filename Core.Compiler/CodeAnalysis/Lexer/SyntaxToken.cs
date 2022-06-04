@@ -12,7 +12,11 @@ public class SyntaxToken : SyntaxNode
     {
         get
         {
-            if (Text != null) return new TextSpan(Position - Text.Length, Text.Length);
+            if (Text != null)
+            {
+                return new TextSpan(Position - Text.Length, Text.Length);
+            }
+
             return default;
         }
     }

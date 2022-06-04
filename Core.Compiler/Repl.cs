@@ -80,7 +80,7 @@ public class Repl
             ShowTree(tree.Root);
             
             // Evaluate the expression and print the output, along with any errors
-            Compilation compilation = new Compilation(tree);
+            var compilation = new Compilation(tree);
             Result result = compilation.Evaluate();
 
             if (!result.Errors.Any())
@@ -177,7 +177,7 @@ public class Repl
                 break;
         }
 
-        // Basically for printing numbers
+        // Print numbers / token text
         if (node is SyntaxToken token)
         {
             if (token.Value is not null)
