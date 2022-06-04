@@ -49,6 +49,7 @@ public static class EvaluatorTest
             ("False == False", true),
             ("False", false),
             ("True", true),
+            ("!True", false),
             ("False || True", true),
             ("True && True", true),
             ("True && False", false),

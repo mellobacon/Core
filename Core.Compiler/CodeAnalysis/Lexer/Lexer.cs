@@ -120,6 +120,10 @@ public class Lexer
                 _type = SyntaxTokenType.ModuloToken;
                 Advance(1);
                 break;
+            case '!':
+                _type = SyntaxTokenType.BangToken;
+                Advance(1);
+                break;
             case '^':
                 _type = SyntaxTokenType.HatToken;
                 Advance(1);
@@ -242,7 +246,7 @@ public class Lexer
         int length = _position - _start;
         string text = _text.Substring(_start, length);
         _type = SyntaxTokenType.StringToken;
-        _value = text[1..^1];
+        _value = text[1..^1]; // ignore surrounding quotes
         return text;
     }
 

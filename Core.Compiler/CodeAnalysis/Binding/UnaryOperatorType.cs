@@ -2,5 +2,6 @@
 
 public enum UnaryOperatorType
 {
-    Negation
+    Negation,
+    BooleanNegation
 }

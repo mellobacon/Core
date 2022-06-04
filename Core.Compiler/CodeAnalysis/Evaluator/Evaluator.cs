@@ -98,6 +98,7 @@ public class Evaluator
         return u.Op.BoundType switch
         {
             UnaryOperatorType.Negation => -(int)operand,
+            UnaryOperatorType.BooleanNegation => !(bool)operand,
             _ => throw new Exception($"Unexpected unary operator {u.Op}")
         };
     }

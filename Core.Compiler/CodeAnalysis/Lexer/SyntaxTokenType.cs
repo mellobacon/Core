@@ -21,6 +21,7 @@ public enum SyntaxTokenType
 
     DoublePipeToken,
     DoubleAmpersandToken,
+    BangToken,
         
     EqualsToken,
         

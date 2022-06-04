@@ -20,6 +20,7 @@ public class UnaryBoundOperator
     {
         new(SyntaxTokenType.MinusToken, UnaryOperatorType.Negation, typeof(int)),
         new(SyntaxTokenType.MinusToken, UnaryOperatorType.Negation, typeof(float)),
+        new(SyntaxTokenType.BangToken, UnaryOperatorType.BooleanNegation, typeof(bool)),
     };
     
     public static UnaryBoundOperator? GetOp(SyntaxTokenType kind, Type operandtype)

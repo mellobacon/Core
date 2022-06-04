@@ -36,28 +36,37 @@ public static class LexerTest
             ("1.2.3", SyntaxTokenType.BadToken),
             ("1000_", SyntaxTokenType.BadToken),
             ("100__000_______________000", SyntaxTokenType.NumberToken),
+            
             ("+", SyntaxTokenType.PlusToken),
             ("-", SyntaxTokenType.MinusToken),
             ("/", SyntaxTokenType.SlashToken),
             ("*", SyntaxTokenType.StarToken),
             ("%", SyntaxTokenType.ModuloToken),
             ("^", SyntaxTokenType.HatToken),
+            ("!", SyntaxTokenType.BangToken),
+            
             ("<", SyntaxTokenType.LessThanToken),
             (">", SyntaxTokenType.MoreThanToken),
             ("<=", SyntaxTokenType.LessEqualsToken),
             (">=", SyntaxTokenType.MoreEqualsToken),
             ("=", SyntaxTokenType.EqualsToken),
+            
             ("(", SyntaxTokenType.OpenParenToken),
             (")", SyntaxTokenType.ClosedParenToken),
+            
             ("||", SyntaxTokenType.DoublePipeToken),
             ("&&", SyntaxTokenType.DoubleAmpersandToken),
             ("==", SyntaxTokenType.EqualsEqualsToken),
+            
             ("False", SyntaxTokenType.FalseKeyword),
             ("True", SyntaxTokenType.TrueKeyword),
+            
             ("let", SyntaxTokenType.VariableKeyword),
+            
             ("_Test", SyntaxTokenType.VariableToken),
             ("_1000", SyntaxTokenType.VariableToken),
             ("myVar", SyntaxTokenType.VariableToken),
+            
             ("\"string\"", SyntaxTokenType.StringToken),
             ("\"str ing\"", SyntaxTokenType.StringToken),
             ("\"THE FITNESS GRAM PACER TEST IS A-\"", SyntaxTokenType.StringToken),

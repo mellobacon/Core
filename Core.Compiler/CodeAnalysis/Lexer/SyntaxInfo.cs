@@ -5,7 +5,8 @@ public static class SyntaxInfo
     {
         return type switch
         {
-            SyntaxTokenType.MinusToken => 7,
+            SyntaxTokenType.MinusToken => 8,
+            SyntaxTokenType.BangToken => 7,
             _ => 0
         };
     }
@@ -62,11 +63,11 @@ public static class SyntaxInfo
             SyntaxTokenType.EqualsEqualsToken => "==",
             SyntaxTokenType.EqualsToken => "=",
             SyntaxTokenType.HatToken => "^",
+            SyntaxTokenType.BangToken => "!",
             /*
             SyntaxTokenType.OpenBracketToken => "{",
             SyntaxTokenType.ClosedBracketToken => "}",
             SyntaxTokenType.SemicolonToken => ";",
-            SyntaxTokenType.BangToken => "!",
             SyntaxTokenType.NotEqualsToken => "!=",
             SyntaxTokenType.StarStarToken => "**",
             SyntaxTokenType.PlusEqualsToken => "+=",
