@@ -74,11 +74,12 @@ public static class EvaluatorTest
     {
         var evals = new (string text, string error)[]
         {
-            ("2.2.2", "Heehoo invalid number: Cannot convert 2.2.2 to System.Single"),
-            ("$", "Heehoo bad character: $ is not a valid character"),
-            ("2||2", "Heehoo bad binary operator || cant be applied to System.Int32 and System.Int32"),
-            ("100_", "Heehoo invalid token 100_"),
-            ("-False", "Heehoo bad unary operator - cant be applied to System.Boolean")
+            ("2.2.2", "Error - invalid number: Cannot convert 2.2.2 to System.Single"),
+            ("$", "Error - bad character: $ is not a valid character"),
+            ("2||2", "Error - bad binary operator || cant be applied to System.Int32 and System.Int32"),
+            ("100_", "Error - invalid token 100_"),
+            ("-False", "Error - bad unary operator - cant be applied to System.Boolean"),
+            ("!100", "Error - bad unary operator ! cant be applied to System.Int32")
         };
         foreach ((string text, string error) in evals)
         {

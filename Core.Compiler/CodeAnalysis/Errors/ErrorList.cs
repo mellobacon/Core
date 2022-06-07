@@ -25,38 +25,44 @@ public class ErrorList
     }
     public void ReportInvalidNumberConversion(TextSpan span, string num, object type)
     {
-        string message = $"Heehoo invalid number: Cannot convert {num} to {type}";
+        string message = $"Error - invalid number: Cannot convert {num} to {type}";
         _errors.Add(new Error(span, message));
     }
 
     public void ReportBadCharacter(char character, int position)
     {
         TextSpan span = new(position, 1);
-        string message = $"Heehoo bad character: {character} is not a valid character";
+        string message = $"Error - bad character: {character} is not a valid character";
         _errors.Add(new Error(span, message));
     }
 
     public void ReportUnExpectedToken(TextSpan span, string? token, SyntaxTokenType result, SyntaxTokenType expected)
     {
-        string message = $"Heehoo unexpected token <{token}>: got {result} not {expected}";
+        string message = $"Error - unexpected token <{token}>: got {result} not {expected}";
         _errors.Add(new Error(span, message));
     }
 
     public void ReportUndefinedBinaryOperator(TextSpan span, Type left, string? op, Type right)
     {
-        string message = $"Heehoo bad binary operator {op} cant be applied to {left} and {right}";
+        string message = $"Error - bad binary operator {op} cant be applied to {left} and {right}";
         _errors.Add(new Error(span, message));
     }
     
     public void ReportUndefinedUnaryOperator(TextSpan span, string? op, Type operand)
     {
-        string message = $"Heehoo bad unary operator {op} cant be applied to {operand}";
+        string message = $"Error - bad unary operator {op} cant be applied to {operand}";
         _errors.Add(new Error(span, message));
     }
 
     public void ReportInvalidToken(TextSpan span, string token)
     {
-        var message = $"Heehoo invalid token {token}";
+        var message = $"Error - invalid token {token}";
+        _errors.Add(new Error(span, message));
+    }
+
+    public void ReportVariableNoneExistent(TextSpan span, string token)
+    {
+        var message = $"Error - the variable '{token}' does not exist";
         _errors.Add(new Error(span, message));
     }
 }

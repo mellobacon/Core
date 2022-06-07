@@ -73,7 +73,11 @@ public class Binder
         string? name = syntax.VariableToken.Text;
         Variable? variable = Variables.GetVariable(name);
 
-        if (variable is null) return new LiteralBoundExpression(0);
+        if (variable is null)
+        {
+            Errors.ReportVariableNoneExistent(syntax.VariableToken.TextSpan, name);
+            return new LiteralBoundExpression(0);
+        }
 
         return new VariableBoundExpression(variable);
     }
