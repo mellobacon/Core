@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.Compiler.CodeAnalysis.Binding;
 using Core.Compiler.CodeAnalysis.Binding.Expressions;
+using Core.Compiler.CodeAnalysis.Lexer;
 
 namespace Core.Compiler.CodeAnalysis.Evaluator;
 public class Evaluator
@@ -33,6 +34,49 @@ public class Evaluator
     {
         if (root is not AssignmentBoundExpression a) return null;
         object? value = EvaluateExpression(a.Expression);
+
+        if (a.HasCompoundOp)
+        {
+            // Ok...*listen*...i can explain.....
+            // dynamic works ok xd. this is jank. but it works
+            dynamic variableValue = 0;
+            dynamic temp = 0;
+            if (value is float)
+            {
+                temp = Convert.ToSingle(value);
+                variableValue = Convert.ToSingle(Variables.GetVariableValue(a.Variable.Name) ?? 0);
+            }
+            else if (value is int)
+            {
+                temp = (int)value;
+                variableValue = (int)(Variables.GetVariableValue(a.Variable.Name) ?? 0);
+            }
+            
+            switch (a.Operator.Type)
+            {
+                case SyntaxTokenType.PlusToken:
+                    value = variableValue + temp;
+                    Variables.SetVariable(a.Variable, value);
+                    return value;
+                case SyntaxTokenType.MinusToken:
+                    value = variableValue - temp;
+                    Variables.SetVariable(a.Variable, value);
+                    return value;
+                case SyntaxTokenType.SlashToken:
+                    value = variableValue / temp;
+                    Variables.SetVariable(a.Variable, value);
+                    return value;
+                case SyntaxTokenType.StarToken:
+                    value = variableValue * temp;
+                    Variables.SetVariable(a.Variable, value);
+                    return value;
+                case SyntaxTokenType.ModuloToken:
+                    value = variableValue % temp;
+                    Variables.SetVariable(a.Variable, value);
+                    return value;
+            }
+        }
+        
         Variables.SetVariable(a.Variable, value);
 
         return value;
@@ -65,7 +109,7 @@ public class Evaluator
                 BinaryOperatorType.MoreEqual => Convert.ToSingle(left) >= Convert.ToSingle(right),
                 BinaryOperatorType.Equal => Equals(left, right),
                 BinaryOperatorType.Exponent => Math.Pow(Convert.ToSingle(left), Convert.ToSingle(right)),
-                _ => throw new Exception($"Unexpected binary operator {b.Op}")
+                _ => throw new Exception($"Unexpected binary operator {b.Op} (Evaluator)")
             };
         }
 
@@ -83,8 +127,9 @@ public class Evaluator
             BinaryOperatorType.LessEqual => (int)left <= (int)right,
             BinaryOperatorType.MoreEqual => (int)left >= (int)right,
             BinaryOperatorType.Equal => Equals(left, right),
+            BinaryOperatorType.NotEqual => !Equals(left, right),
             BinaryOperatorType.Exponent => Math.Pow((int)left, (int)right),
-            _ => throw new Exception($"Unexpected binary operator {b.Op}")
+            _ => throw new Exception($"Unexpected binary operator {b.Op} (Evaluator)")
         };
     }
 

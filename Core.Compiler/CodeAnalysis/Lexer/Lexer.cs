@@ -101,28 +101,76 @@ public class Lexer
                 text = LexString();
                 break;
             case '+':
-                _type = SyntaxTokenType.PlusToken;
-                Advance(1);
+                if (GetToken(1) == '=')
+                {
+                    _type = SyntaxTokenType.PlusEqualsToken;
+                    Advance(2);
+                }
+                else
+                {
+                    _type = SyntaxTokenType.PlusToken;
+                    Advance(1);
+                }
                 break;
             case '-':
-                _type = SyntaxTokenType.MinusToken;
-                Advance(1);
+                if (GetToken(1) == '=')
+                {
+                    _type = SyntaxTokenType.MinusEqualsToken;
+                    Advance(2);
+                }
+                else
+                {
+                    _type = SyntaxTokenType.MinusToken;
+                    Advance(1);
+                }
                 break;
             case '/':
-                _type = SyntaxTokenType.SlashToken;
-                Advance(1);
+                if (GetToken(1) == '=')
+                {
+                    _type = SyntaxTokenType.SlashEqualsToken;
+                    Advance(2);
+                }
+                else
+                {
+                    _type = SyntaxTokenType.SlashToken;
+                    Advance(1);
+                }
                 break;
             case '*':
-                _type = SyntaxTokenType.StarToken;
-                Advance(1);
+                if (GetToken(1) == '=')
+                {
+                    _type = SyntaxTokenType.StarEqualsToken;
+                    Advance(2);
+                }
+                else
+                {
+                    _type = SyntaxTokenType.StarToken;
+                    Advance(1);
+                }
                 break;
             case '%':
-                _type = SyntaxTokenType.ModuloToken;
-                Advance(1);
+                if (GetToken(1) == '=')
+                {
+                    _type = SyntaxTokenType.ModuloEqualsToken;
+                    Advance(2);
+                }
+                else
+                {
+                    _type = SyntaxTokenType.ModuloToken;
+                    Advance(1);
+                }
                 break;
             case '!':
-                _type = SyntaxTokenType.BangToken;
-                Advance(1);
+                if (GetToken(1) == '=')
+                {
+                    _type = SyntaxTokenType.NotEqualsToken;
+                    Advance(2);
+                }
+                else
+                {
+                    _type = SyntaxTokenType.BangToken;
+                    Advance(1);
+                }
                 break;
             case '^':
                 _type = SyntaxTokenType.HatToken;
@@ -187,6 +235,18 @@ public class Lexer
                 break;
             case ')':
                 _type = SyntaxTokenType.ClosedParenToken;
+                Advance(1);
+                break;
+            case '{':
+                _type = SyntaxTokenType.OpenBracketToken;
+                Advance(1);
+                break;
+            case '}':
+                _type = SyntaxTokenType.ClosedBracketToken;
+                Advance(1);
+                break;
+            case ';':
+                _type = SyntaxTokenType.SemicolonToken;
                 Advance(1);
                 break;
             default:

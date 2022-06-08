@@ -82,6 +82,12 @@ public class BoundBinaryOperator
         new(BinaryOperatorType.Equal, SyntaxTokenType.EqualsEqualsToken, typeof(int), typeof(float), typeof(bool)),
         new(BinaryOperatorType.Equal, SyntaxTokenType.EqualsEqualsToken, typeof(float), typeof(int), typeof(bool)),
         
+        new(BinaryOperatorType.NotEqual, SyntaxTokenType.NotEqualsToken, typeof(int), typeof(bool)),
+        new(BinaryOperatorType.NotEqual, SyntaxTokenType.NotEqualsToken, typeof(float), typeof(bool)),
+        new(BinaryOperatorType.NotEqual, SyntaxTokenType.NotEqualsToken, typeof(bool)),
+        new(BinaryOperatorType.NotEqual, SyntaxTokenType.NotEqualsToken, typeof(int), typeof(float), typeof(bool)),
+        new(BinaryOperatorType.NotEqual, SyntaxTokenType.NotEqualsToken, typeof(float), typeof(int), typeof(bool)),
+        
         new(BinaryOperatorType.LogicalAnd, SyntaxTokenType.DoubleAmpersandToken, typeof(bool)),
         new(BinaryOperatorType.LogicalOr, SyntaxTokenType.DoublePipeToken, typeof(bool))
     };

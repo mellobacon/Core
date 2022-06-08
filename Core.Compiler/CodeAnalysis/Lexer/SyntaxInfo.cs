@@ -26,9 +26,37 @@ public static class SyntaxInfo
             SyntaxTokenType.LessEqualsToken => 3,
             SyntaxTokenType.MoreEqualsToken => 3,
             SyntaxTokenType.EqualsEqualsToken => 3,
+            SyntaxTokenType.NotEqualsToken => 3,
             SyntaxTokenType.DoubleAmpersandToken => 2,
             SyntaxTokenType.DoublePipeToken => 1,
             _ => 0
+        };
+    }
+    
+    public static bool IsCompoundOperator(SyntaxToken token)
+    {
+        return token.Type switch
+        {
+            SyntaxTokenType.PlusEqualsToken or
+            SyntaxTokenType.MinusEqualsToken or
+            SyntaxTokenType.SlashEqualsToken or
+            SyntaxTokenType.StarEqualsToken or
+            SyntaxTokenType.ModuloEqualsToken
+            => true,
+            _ => false
+        };
+    }
+
+    public static SyntaxToken GetOp(SyntaxToken op)
+    {
+        return op.Type switch
+        {
+            SyntaxTokenType.PlusEqualsToken => new SyntaxToken(op.Text, op.Value,  SyntaxTokenType.PlusToken, op.Position),
+            SyntaxTokenType.MinusEqualsToken => new SyntaxToken(op.Text, op.Value,  SyntaxTokenType.MinusToken, op.Position),
+            SyntaxTokenType.SlashEqualsToken => new SyntaxToken(op.Text, op.Value,  SyntaxTokenType.SlashToken, op.Position),
+            SyntaxTokenType.StarEqualsToken => new SyntaxToken(op.Text, op.Value,  SyntaxTokenType.StarToken, op.Position),
+            SyntaxTokenType.ModuloEqualsToken => new SyntaxToken(op.Text, op.Value,  SyntaxTokenType.ModuloToken, op.Position),
+            _ => op
         };
     }
 
@@ -64,18 +92,15 @@ public static class SyntaxInfo
             SyntaxTokenType.EqualsToken => "=",
             SyntaxTokenType.HatToken => "^",
             SyntaxTokenType.BangToken => "!",
-            /*
+            SyntaxTokenType.NotEqualsToken => "!=",
             SyntaxTokenType.OpenBracketToken => "{",
             SyntaxTokenType.ClosedBracketToken => "}",
             SyntaxTokenType.SemicolonToken => ";",
-            SyntaxTokenType.NotEqualsToken => "!=",
-            SyntaxTokenType.StarStarToken => "**",
             SyntaxTokenType.PlusEqualsToken => "+=",
             SyntaxTokenType.MinusEqualsToken => "-=",
             SyntaxTokenType.SlashEqualsToken => "/=",
             SyntaxTokenType.StarEqualsToken => "*=",
             SyntaxTokenType.ModuloEqualsToken => "%=",
-            */
             _ => null
         };
     }

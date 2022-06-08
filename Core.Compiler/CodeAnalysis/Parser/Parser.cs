@@ -53,7 +53,17 @@ public class Parser
             ExpressionSyntax expression = ParseAssignmentExpression();
             return new AssignmentExpression(variable, equalstoken, expression);
         }
-        
+
+        if (Current.Type == SyntaxTokenType.VariableToken && SyntaxInfo.IsCompoundOperator(Peek(1)))
+        {
+            SyntaxToken compoundop = SyntaxInfo.GetOp(Peek(1));
+            bool iscompoundop = SyntaxInfo.IsCompoundOperator(Peek(1));
+            SyntaxToken variable = NextToken();
+            SyntaxToken equalstoken = NextToken();
+            ExpressionSyntax expression = ParseBinaryExpression();
+            return new AssignmentExpression(variable, equalstoken, compoundop, expression, iscompoundop);
+        }
+
         return ParseBinaryExpression();
     }
 

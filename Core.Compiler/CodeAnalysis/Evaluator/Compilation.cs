@@ -12,7 +12,7 @@ public class Compilation
     {
         _tree = tree;
     }
-        
+    
     public Result Evaluate()
     {
         var binder = new Binder();

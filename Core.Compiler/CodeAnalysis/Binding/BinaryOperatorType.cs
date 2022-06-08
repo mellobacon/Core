@@ -12,6 +12,7 @@ public enum BinaryOperatorType
     LessEqual,
     MoreEqual,
     Equal,
+    NotEqual,
     LogicalOr,
     LogicalAnd
 }

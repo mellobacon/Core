@@ -13,11 +13,22 @@ public enum SyntaxTokenType
     HatToken,
     LessThanToken,
     MoreThanToken,
+    
     LessEqualsToken,
     MoreEqualsToken,
     EqualsEqualsToken,
+    NotEqualsToken,
+    
+    PlusEqualsToken,
+    MinusEqualsToken,
+    SlashEqualsToken,
+    StarEqualsToken,
+    ModuloEqualsToken,
+    
     OpenParenToken,
     ClosedParenToken,
+    OpenBracketToken,
+    ClosedBracketToken,
 
     DoublePipeToken,
     DoubleAmpersandToken,
@@ -37,6 +48,7 @@ public enum SyntaxTokenType
     VariableExpression,
 
     WhiteSpaceToken,
+    SemicolonToken,
     BadToken,
     EofToken
 }

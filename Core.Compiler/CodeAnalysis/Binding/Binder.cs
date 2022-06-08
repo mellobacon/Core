@@ -64,8 +64,10 @@ public class Binder
         {
             Variables.AddVariable(variable);
         }
+        
+        
 
-        return new AssignmentBoundExpression(variable, expression);
+        return new AssignmentBoundExpression(variable, expression, syntax.Operator, syntax.IsCompoundOp);
     }
 
     private IBoundExpression BindVariableExpression(VariableExpression syntax)

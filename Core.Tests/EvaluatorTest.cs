@@ -47,6 +47,8 @@ public static class EvaluatorTest
             ("(5 * 10) / 16 == 3.125", true),
             ("1 == 1", true),
             ("False == False", true),
+            ("5 != 6", true),
+            ("False != False", false),
             ("False", false),
             ("True", true),
             ("!True", false),

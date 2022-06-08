@@ -53,10 +53,18 @@ public static class LexerTest
             
             ("(", SyntaxTokenType.OpenParenToken),
             (")", SyntaxTokenType.ClosedParenToken),
-            
+            ("{", SyntaxTokenType.OpenBracketToken),
+            ("}", SyntaxTokenType.ClosedBracketToken),
+
             ("||", SyntaxTokenType.DoublePipeToken),
             ("&&", SyntaxTokenType.DoubleAmpersandToken),
             ("==", SyntaxTokenType.EqualsEqualsToken),
+            ("!=", SyntaxTokenType.NotEqualsToken),
+            ("+=", SyntaxTokenType.PlusEqualsToken),
+            ("-=", SyntaxTokenType.MinusEqualsToken),
+            ("/=", SyntaxTokenType.SlashEqualsToken),
+            ("*=", SyntaxTokenType.StarEqualsToken),
+            ("%=", SyntaxTokenType.ModuloEqualsToken),
             
             ("False", SyntaxTokenType.FalseKeyword),
             ("True", SyntaxTokenType.TrueKeyword),
@@ -71,6 +79,8 @@ public static class LexerTest
             ("\"str ing\"", SyntaxTokenType.StringToken),
             ("\"THE FITNESS GRAM PACER TEST IS A-\"", SyntaxTokenType.StringToken),
             ("\")(**^%^&(*uyGYU5789324U3J\"", SyntaxTokenType.StringToken),
+            
+            (";", SyntaxTokenType.SemicolonToken),
         };
         foreach ((string text, SyntaxTokenType type) in tokens)
         {
