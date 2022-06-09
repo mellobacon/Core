@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Core.Compiler.CodeAnalysis;
 using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Evaluator;
 using Core.Compiler.CodeAnalysis.Lexer;
@@ -90,12 +91,17 @@ public class Repl
                 Console.ResetColor();
             }
             
+            SourceText sourcetext = tree.Text;
             foreach (Error error in result.Errors.ToArray())
             {
+                int lineindex = sourcetext.GetLineIndex(error.TextSpan.Start);
+                int linenumber = lineindex + 1;
+                int character = error.TextSpan.Start - sourcetext.Lines[lineindex].Start + 1;
+                
                 if (error.ToString().Contains("Eof")) break;
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
+                Console.WriteLine($"({linenumber}, {character}): {error} at: ");
                 Console.ResetColor();
 
                 string prefix = text[..error.TextSpan.Start];

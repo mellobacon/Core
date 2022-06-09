@@ -11,9 +11,11 @@ public class Parser
     private readonly List<SyntaxToken> _tokens = new();
     private SyntaxToken Current => Peek(0);
     private readonly ErrorList _errors = new();
+    private readonly SourceText Text;
 
-    public Parser(string text)
+    public Parser(SourceText text)
     {
+        Text = text;
         // Lex the tokens and add them to the tokens list for parsing
         var lexer = new Lexer.Lexer(text);
         while (true)
@@ -40,7 +42,7 @@ public class Parser
         // recursive decent parser
         ExpressionSyntax expression = ParseAssignmentExpression();
         SyntaxToken eofToken = MatchToken(SyntaxTokenType.EofToken);
-        return new SyntaxTree(expression, eofToken, _errors);
+        return new SyntaxTree(expression, eofToken, _errors, Text);
     }
 
     

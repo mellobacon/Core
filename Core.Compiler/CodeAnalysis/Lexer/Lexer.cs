@@ -3,7 +3,7 @@
 namespace Core.Compiler.CodeAnalysis.Lexer;
 public class Lexer
 {
-    private readonly string _text;
+    private readonly SourceText _text;
     private object? _value;
     private SyntaxTokenType _type;
 
@@ -15,7 +15,7 @@ public class Lexer
     // keeps track of any errors during when lexing
     public ErrorList Errors { get; } = new();
 
-    public Lexer(string text)
+    public Lexer(SourceText text)
     {
         _text = text;
     }

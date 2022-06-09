@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Compiler.CodeAnalysis;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Xunit;
 
@@ -10,7 +11,7 @@ public static class LexerTest
     public static void Lexer_Can_Lex(string text, SyntaxTokenType type)
     {
         var tokens = new List<SyntaxToken>();
-        Lexer lexer = new (text);
+        Lexer lexer = new (SourceText.From(text));
         while (true)
         {
             SyntaxToken token = lexer.Lex();

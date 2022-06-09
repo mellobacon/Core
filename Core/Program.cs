@@ -1,4 +1,5 @@
-﻿using Core.Compiler;
+﻿using System.IO;
+using Core.Compiler;
 
 namespace Core;
 
@@ -11,6 +12,6 @@ internal static class Program
             Prompt = "» ",
             MultilinePrompt = "→ "
         };
-        repl.Run();
+        repl.Run(); //../../../testfile.corelang"
     }
 }

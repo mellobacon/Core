@@ -8,17 +8,20 @@ public class SyntaxTree
     public readonly ExpressionSyntax Root;
     private SyntaxToken _eofToken;
     public readonly ErrorList Errors;
+    public readonly SourceText Text;
 
-    public SyntaxTree(ExpressionSyntax expression, SyntaxToken eofToken, ErrorList errors)
+    public SyntaxTree(ExpressionSyntax expression, SyntaxToken eofToken, ErrorList errors, SourceText text)
     {
         Root = expression;
         _eofToken = eofToken;
         Errors = errors;
+        Text = text;
     }
 
     public static SyntaxTree Parse(string text)
     {
-        var parser = new Parser(text);
+        SourceText sourcetext = SourceText.From(text);
+        var parser = new Parser(sourcetext);
         return parser.Parse();
     }
 }
