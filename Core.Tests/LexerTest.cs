@@ -72,6 +72,10 @@ public static class LexerTest
             
             ("let", SyntaxTokenType.VariableKeyword),
             
+            ("if", SyntaxTokenType.IfKeyword),
+            ("else", SyntaxTokenType.ElseKeyword),
+            ("while", SyntaxTokenType.WhileKeyword),
+
             ("_Test", SyntaxTokenType.VariableToken),
             ("_1000", SyntaxTokenType.VariableToken),
             ("myVar", SyntaxTokenType.VariableToken),

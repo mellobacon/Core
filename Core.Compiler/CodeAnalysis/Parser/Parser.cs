@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser.Expressions;
+using Core.Compiler.CodeAnalysis.Parser.Statements;
 
 namespace Core.Compiler.CodeAnalysis.Parser;
 public class Parser
@@ -11,11 +13,11 @@ public class Parser
     private readonly List<SyntaxToken> _tokens = new();
     private SyntaxToken Current => Peek(0);
     private readonly ErrorList _errors = new();
-    private readonly SourceText Text;
+    private readonly SourceText _text;
 
     public Parser(SourceText text)
     {
-        Text = text;
+        _text = text;
         // Lex the tokens and add them to the tokens list for parsing
         var lexer = new Lexer.Lexer(text);
         while (true)
@@ -42,10 +44,60 @@ public class Parser
         // recursive decent parser
         ExpressionSyntax expression = ParseAssignmentExpression();
         SyntaxToken eofToken = MatchToken(SyntaxTokenType.EofToken);
-        return new SyntaxTree(expression, eofToken, _errors, Text);
+        return new SyntaxTree(expression, eofToken, _errors, _text);
     }
 
-    
+    private StatementSyntax ParseStatement()
+    {
+        return Current.Type switch
+        {
+            SyntaxTokenType.BlockStatement => ParseBlockStatement(),
+            SyntaxTokenType.VariableStatement => ParseVariableStatement(),
+            _ => ParseExpressionStatement()
+        };
+    }
+
+    private StatementSyntax ParseBlockStatement()
+    {
+        ImmutableArray<StatementSyntax>.Builder statements = ImmutableArray.CreateBuilder<StatementSyntax>();
+        SyntaxToken openbracket = MatchToken(SyntaxTokenType.OpenBracketToken);
+
+        while (Current.Type != SyntaxTokenType.EofToken && Current.Type != SyntaxTokenType.ClosedBracketToken)
+        {
+            SyntaxToken starttoken = Current; // rename this
+                
+            StatementSyntax statement = ParseStatement();
+            statements.Add(statement);
+
+            if (Current == starttoken)
+            {
+                NextToken();
+            }
+        }
+            
+        SyntaxToken closedbracket = MatchToken(SyntaxTokenType.ClosedBracketToken);
+            
+        return new BlockStatement(openbracket, statements.ToImmutable(), closedbracket);
+    }
+
+    private StatementSyntax ParseVariableStatement()
+    {
+        SyntaxToken keyword = MatchToken(SyntaxTokenType.VariableKeyword);
+        SyntaxToken variable = MatchToken(SyntaxTokenType.VariableToken);
+        SyntaxToken equals = MatchToken(SyntaxTokenType.EqualsToken);
+        ExpressionSyntax expression = ParseAssignmentExpression();
+        SyntaxToken semicolon = MatchToken(SyntaxTokenType.SemicolonToken);
+        return new VariableStatement(keyword, variable, equals, expression, semicolon);
+    }
+
+    private StatementSyntax ParseExpressionStatement()
+    {
+        ExpressionSyntax expression = ParseAssignmentExpression();
+        SyntaxToken semicolon = MatchToken(SyntaxTokenType.SemicolonToken);
+        return new ExpressionStatement(expression, semicolon);
+    }
+
+
     private ExpressionSyntax ParseAssignmentExpression()
     {
         if (Current.Type == SyntaxTokenType.VariableToken && Peek(1).Type == SyntaxTokenType.EqualsToken)
