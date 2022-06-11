@@ -39,7 +39,17 @@ public enum SyntaxTokenType
     TrueKeyword,
     FalseKeyword,
     VariableKeyword,
+    IfKeyword,
+    ElseKeyword,
+    WhileKeyword,
 
+    BlockStatement,
+    ExpressionStatement,
+    VariableStatement,
+    IfStatement,
+    ElseStatement,
+    WhileStatement,
+    
     BinaryExpression,
     UnaryExpression,
     LiteralExpression,

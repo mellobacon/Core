@@ -67,6 +67,9 @@ public static class SyntaxInfo
             "True" => SyntaxTokenType.TrueKeyword,
             "False" => SyntaxTokenType.FalseKeyword,
             "let" => SyntaxTokenType.VariableKeyword,
+            "if" => SyntaxTokenType.IfKeyword,
+            "else" => SyntaxTokenType.ElseKeyword,
+            "while" => SyntaxTokenType.WhileKeyword,
             _ => SyntaxTokenType.VariableToken
         };
     }
