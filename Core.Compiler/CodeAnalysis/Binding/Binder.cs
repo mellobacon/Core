@@ -1,14 +1,54 @@
 ﻿using System;
+using System.Collections.Immutable;
 using Core.Compiler.CodeAnalysis.Binding.Expressions;
+using Core.Compiler.CodeAnalysis.Binding.Statements;
 using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser.Expressions;
+using Core.Compiler.CodeAnalysis.Parser.Statements;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding;
 public class Binder
 {
     public ErrorList Errors { get; } = new();
 
+    public IBoundStatement BindStatement(StatementSyntax syntax)
+    {
+        return syntax.Type switch
+        {
+            SyntaxTokenType.BlockStatement => BindBlockStatement((BlockStatement)syntax),
+            SyntaxTokenType.VariableStatement => BindVariableStatement((VariableStatement)syntax),
+            SyntaxTokenType.ExpressionStatement => BindExpressionStatement((ExpressionStatement)syntax),
+            _ => throw new Exception($"Unexpected statement syntax [{syntax.Type}] (Binder)")
+        };
+    }
+
+    private IBoundStatement BindBlockStatement(BlockStatement syntax)
+    {
+        ImmutableArray<IBoundStatement>.Builder statements = ImmutableArray.CreateBuilder<IBoundStatement>();
+        foreach (StatementSyntax statement in syntax.Statements)
+        {
+            IBoundStatement s = BindStatement(statement);
+            statements.Add(s);
+        }
+
+        return new BlockBoundStatement(statements.ToImmutable());
+    }
+    private IBoundStatement BindVariableStatement(VariableStatement syntax)
+    {
+        string name = syntax.Variable.Text ?? "no";
+        IBoundExpression expression = BindExpression(syntax.Expression);
+        var variable = new VariableSymbol(name, expression.Type);
+        return new VariableBoundStatement(variable, expression);
+    }
+    
+    private IBoundStatement BindExpressionStatement(ExpressionStatement syntax)
+    {
+        IBoundExpression expression = BindExpression(syntax.Expression);
+        return new ExpressionBoundStatement(expression);
+    }
+    
     public IBoundExpression BindExpression(ExpressionSyntax syntax)
     {
         return syntax.Type switch
