@@ -6,6 +6,7 @@ public enum BoundType
     LiteralExpression,
     AssignmentExpression,
     VariableExpression,
+    MethodExpression,
     
     BlockStatement,
     ExpressionStatement,

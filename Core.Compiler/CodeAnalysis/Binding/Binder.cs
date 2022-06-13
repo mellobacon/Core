@@ -6,6 +6,7 @@ using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser.Expressions;
 using Core.Compiler.CodeAnalysis.Parser.Statements;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding;
 public class Binder
@@ -77,6 +78,7 @@ public class Binder
             SyntaxTokenType.GroupedExpression => BindGroupedExpression((GroupedExpression)syntax),
             SyntaxTokenType.AssignmentExpression => BindAssignmentExpression((AssignmentExpression)syntax),
             SyntaxTokenType.VariableExpression => BindVariableExpression((VariableExpression)syntax),
+            SyntaxTokenType.FunctionCallExpression => BindMethodExpression((FunctionCallExpression)syntax),
             _ => throw new Exception($"Unexpected syntax [{syntax.Type}] (Binder)")
         };
     }
@@ -144,5 +146,12 @@ public class Binder
     private IBoundExpression BindGroupedExpression(GroupedExpression syntax)
     {
         return BindExpression(syntax.Expression);
+    }
+
+    private IBoundExpression BindMethodExpression(FunctionCallExpression syntax)
+    {
+        IBoundExpression arg = BindExpression(syntax.Arg);
+        FunctionSymbol function = Functions.Print;
+        return new MethodBoundExpression(function, arg);
     }
 }

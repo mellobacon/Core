@@ -2,6 +2,8 @@
 
 public enum SymbolType
 {
+    FunctionSymbol,
+    ParameterSymbol,
     VariableSymbol,
     TypeSymbol
 }

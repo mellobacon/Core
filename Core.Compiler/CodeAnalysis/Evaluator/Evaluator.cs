@@ -66,8 +66,19 @@ public class Evaluator
             BoundType.LiteralExpression => EvaluateLiteralExpression(root),
             BoundType.AssignmentExpression => EvaluateAssignmentExpression(root),
             BoundType.VariableExpression => EvaluateVariableExpression(root),
+            BoundType.MethodExpression => EvaluateMethod(root),
             _ => null
         };
+    }
+
+    private object? EvaluateMethod(IBoundExpression root)
+    {
+        if (root is not MethodBoundExpression m) return null;
+        object message = EvaluateExpression(m.Arg)!;
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.WriteLine(message);
+        Console.ResetColor();
+        return null;
     }
 
     private object? EvaluateAssignmentExpression(IBoundExpression root)

@@ -136,7 +136,6 @@ public class Parser
         return new ExpressionStatement(expression, semicolon);
     }
 
-
     private ExpressionSyntax ParseAssignmentExpression()
     {
         if (Current.Type == SyntaxTokenType.VariableToken && Peek(1).Type == SyntaxTokenType.EqualsToken)
@@ -155,6 +154,15 @@ public class Parser
             SyntaxToken equalstoken = NextToken();
             ExpressionSyntax expression = ParseBinaryExpression();
             return new AssignmentExpression(variable, equalstoken, compoundop, expression, iscompoundop);
+        }
+
+        if (Current.Type == SyntaxTokenType.VariableToken && Peek(1).Type == SyntaxTokenType.OpenParenToken)
+        {
+            SyntaxToken name = MatchToken(SyntaxTokenType.VariableToken);
+            SyntaxToken openparen = MatchToken(SyntaxTokenType.OpenParenToken);
+            ExpressionSyntax arg = ParseLiteralExpression();
+            SyntaxToken closedparen = MatchToken(SyntaxTokenType.ClosedParenToken);
+            return new FunctionCallExpression(name, openparen, arg, closedparen);
         }
 
         return ParseBinaryExpression();

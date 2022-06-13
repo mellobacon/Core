@@ -56,6 +56,7 @@ public enum SyntaxTokenType
     GroupedExpression,
     AssignmentExpression,
     VariableExpression,
+    FunctionCallExpression,
 
     WhiteSpaceToken,
     SemicolonToken,
