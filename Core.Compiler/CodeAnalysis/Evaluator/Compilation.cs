@@ -1,5 +1,5 @@
 ﻿using Core.Compiler.CodeAnalysis.Binding;
-using Core.Compiler.CodeAnalysis.Binding.Expressions;
+using Core.Compiler.CodeAnalysis.Binding.Statements;
 using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Parser;
 
@@ -16,7 +16,7 @@ public class Compilation
     public Result Evaluate()
     {
         var binder = new Binder();
-        IBoundExpression expression = binder.BindExpression(_tree.Root);
+        IBoundStatement expression = binder.BindStatement(_tree.Root);
 
         _tree.Errors.Concat(binder.Errors);
         ErrorList errors = _tree.Errors;

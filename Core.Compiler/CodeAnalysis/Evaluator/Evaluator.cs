@@ -1,20 +1,45 @@
 ﻿using System;
 using Core.Compiler.CodeAnalysis.Binding;
 using Core.Compiler.CodeAnalysis.Binding.Expressions;
+using Core.Compiler.CodeAnalysis.Binding.Statements;
 using Core.Compiler.CodeAnalysis.Lexer;
 
 namespace Core.Compiler.CodeAnalysis.Evaluator;
 public class Evaluator
 {
-    private readonly IBoundExpression _root;
-    public Evaluator(IBoundExpression root)
+    private readonly IBoundStatement _root;
+    private object? _value;
+    public Evaluator(IBoundStatement root)
     {
         _root = root;
     }
 
     public object? Evaluate()
     {
-        return EvaluateExpression(_root);
+        EvaluateStatement(_root);
+        return _value;
+    }
+
+    private void EvaluateStatement(IBoundStatement root)
+    {
+        switch (root)
+        {
+            case BlockBoundStatement b:
+                foreach (IBoundStatement statement in b.Statements)
+                {
+                    EvaluateStatement(statement);
+                }
+
+                break;
+            case ExpressionBoundStatement e:
+                _value = EvaluateExpression(e.Expression);
+                break;
+            case VariableBoundStatement v:
+                object? value = EvaluateExpression(v.Expression);
+                Variables.SetVariable(v.Variable, value);
+                _value = value;
+                break;
+        }
     }
 
     private object? EvaluateExpression(IBoundExpression root)

@@ -39,7 +39,7 @@ public class Binder
     {
         string name = syntax.Variable.Text ?? "no";
         IBoundExpression expression = BindExpression(syntax.Expression);
-        var variable = new VariableSymbol(name, expression.Type);
+        var variable = new Variable(name, expression.Type);
         return new VariableBoundStatement(variable, expression);
     }
     
@@ -49,7 +49,7 @@ public class Binder
         return new ExpressionBoundStatement(expression);
     }
     
-    public IBoundExpression BindExpression(ExpressionSyntax syntax)
+    private IBoundExpression BindExpression(ExpressionSyntax syntax)
     {
         return syntax.Type switch
         {

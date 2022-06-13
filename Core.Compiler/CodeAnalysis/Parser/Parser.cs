@@ -42,7 +42,7 @@ public class Parser
     public SyntaxTree Parse()
     {
         // recursive decent parser
-        ExpressionSyntax expression = ParseAssignmentExpression();
+        StatementSyntax expression = ParseStatement();
         SyntaxToken eofToken = MatchToken(SyntaxTokenType.EofToken);
         return new SyntaxTree(expression, eofToken, _errors, _text);
     }
@@ -51,8 +51,8 @@ public class Parser
     {
         return Current.Type switch
         {
-            SyntaxTokenType.BlockStatement => ParseBlockStatement(),
-            SyntaxTokenType.VariableStatement => ParseVariableStatement(),
+            SyntaxTokenType.OpenBracketToken => ParseBlockStatement(),
+            SyntaxTokenType.VariableKeyword => ParseVariableStatement(),
             _ => ParseExpressionStatement()
         };
     }

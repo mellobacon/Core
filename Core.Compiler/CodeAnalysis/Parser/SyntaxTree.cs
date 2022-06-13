@@ -1,16 +1,17 @@
 ﻿using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser.Expressions;
+using Core.Compiler.CodeAnalysis.Parser.Statements;
 
 namespace Core.Compiler.CodeAnalysis.Parser;
 public class SyntaxTree
 {
-    public readonly ExpressionSyntax Root;
+    public readonly StatementSyntax Root;
     private SyntaxToken _eofToken;
     public readonly ErrorList Errors;
     public readonly SourceText Text;
 
-    public SyntaxTree(ExpressionSyntax expression, SyntaxToken eofToken, ErrorList errors, SourceText text)
+    public SyntaxTree(StatementSyntax expression, SyntaxToken eofToken, ErrorList errors, SourceText text)
     {
         Root = expression;
         _eofToken = eofToken;
