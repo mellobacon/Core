@@ -9,4 +9,5 @@ public abstract class Symbol
         Name = name;
     }
     public abstract SymbolType Type { get; }
+    public override string ToString() => Name;
 }

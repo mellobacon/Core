@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser;
-using Core.Compiler.CodeAnalysis.Parser.Expressions;
 using Core.Compiler.CodeAnalysis.Parser.Statements;
 using Xunit;
 
@@ -147,5 +145,45 @@ public static class ParserTest
             e.AssertNode(SyntaxTokenType.VariableExpression);
                 e.AssertToken(SyntaxTokenType.VariableToken, "x");
         e.AssertToken(SyntaxTokenType.SemicolonToken, ";");    
+    }
+    
+    [Fact]
+    public static void Parser_Parses_Functions()
+    {
+        StatementSyntax expression = ParseExpression("println(\"stuff\");");
+        using var e = new AssertingNumerator(expression);
+        e.AssertNode(SyntaxTokenType.ExpressionStatement);
+            e.AssertNode(SyntaxTokenType.FunctionCallExpression);
+                e.AssertToken(SyntaxTokenType.VariableToken, "println");
+                e.AssertToken(SyntaxTokenType.OpenParenToken, "(");
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.StringToken, "\"stuff\"");
+                e.AssertToken(SyntaxTokenType.ClosedParenToken, ")");
+            e.AssertToken(SyntaxTokenType.SemicolonToken, ";");
+    }
+
+    [Fact]
+    public static void Parser_Parses_IfStatement()
+    {
+        StatementSyntax expression = ParseExpression("if (2 < 5) {} else {}");
+        using var e = new AssertingNumerator(expression);
+        e.AssertNode(SyntaxTokenType.IfStatement);
+            e.AssertToken(SyntaxTokenType.IfKeyword, "if");
+            e.AssertToken(SyntaxTokenType.OpenParenToken, "(");
+            e.AssertNode(SyntaxTokenType.BinaryExpression);
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.NumberToken, "2");
+                e.AssertToken(SyntaxTokenType.LessThanToken, "<");
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.NumberToken, "5");
+            e.AssertToken(SyntaxTokenType.ClosedParenToken, ")");
+            e.AssertNode(SyntaxTokenType.BlockStatement);
+                e.AssertToken(SyntaxTokenType.OpenBracketToken, "{");
+                e.AssertToken(SyntaxTokenType.ClosedBracketToken, "}");
+            e.AssertNode(SyntaxTokenType.ElseStatement);
+                e.AssertToken(SyntaxTokenType.ElseKeyword, "else");
+                e.AssertNode(SyntaxTokenType.BlockStatement);
+                    e.AssertToken(SyntaxTokenType.OpenBracketToken, "{");
+                    e.AssertToken(SyntaxTokenType.ClosedBracketToken, "}");
     }
 }

@@ -26,7 +26,7 @@ public class ErrorList
     }
     public void ReportInvalidNumberConversion(TextSpan span, string num, TypeSymbol type)
     {
-        string message = $"Error - invalid number: Cannot convert {num} to {type.Type}";
+        string message = $"Error - invalid number: Cannot convert {num} to {type}";
         _errors.Add(new Error(span, message));
     }
 
@@ -45,13 +45,13 @@ public class ErrorList
 
     public void ReportUndefinedBinaryOperator(TextSpan span, TypeSymbol left, string? op, TypeSymbol right)
     {
-        string message = $"Error - bad binary operator {op} cant be applied to {left.Type} and {right.Type}";
+        string message = $"Error - bad binary operator {op} cant be applied to {left} and {right}";
         _errors.Add(new Error(span, message));
     }
     
     public void ReportUndefinedUnaryOperator(TextSpan span, string? op, TypeSymbol operand)
     {
-        string message = $"Error - bad unary operator {op} cant be applied to {operand.Type}";
+        string message = $"Error - bad unary operator {op} cant be applied to {operand}";
         _errors.Add(new Error(span, message));
     }
 
