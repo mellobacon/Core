@@ -29,7 +29,22 @@ public class Evaluator
                 {
                     EvaluateStatement(statement);
                 }
-
+                break;
+            case IfBoundStatement f:
+                if ((bool)(EvaluateExpression(f.Condition) ?? false))
+                {
+                    EvaluateStatement(f.Statement);
+                }
+                else if (f.ElseStatement != null)
+                {
+                    EvaluateStatement(f.ElseStatement);
+                }
+                break;
+            case WhileBoundStatement w:
+                while ((bool)(EvaluateExpression(w.Condition) ?? false))
+                {
+                    EvaluateStatement(w.Statement);
+                }
                 break;
             case ExpressionBoundStatement e:
                 _value = EvaluateExpression(e.Expression);

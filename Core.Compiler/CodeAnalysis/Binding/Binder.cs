@@ -6,7 +6,6 @@ using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser.Expressions;
 using Core.Compiler.CodeAnalysis.Parser.Statements;
-using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding;
 public class Binder
@@ -18,6 +17,8 @@ public class Binder
         return syntax.Type switch
         {
             SyntaxTokenType.BlockStatement => BindBlockStatement((BlockStatement)syntax),
+            SyntaxTokenType.IfStatement => BindIfStatement((IfStatement)syntax),
+            SyntaxTokenType.WhileStatement => BindWhileStatement((WhileStatement)syntax),
             SyntaxTokenType.VariableStatement => BindVariableStatement((VariableStatement)syntax),
             SyntaxTokenType.ExpressionStatement => BindExpressionStatement((ExpressionStatement)syntax),
             _ => throw new Exception($"Unexpected statement syntax [{syntax.Type}] (Binder)")
@@ -35,6 +36,22 @@ public class Binder
 
         return new BlockBoundStatement(statements.ToImmutable());
     }
+
+    private IBoundStatement BindIfStatement(IfStatement syntax)
+    {
+        IBoundExpression condition = BindExpression(syntax.Condition);
+        IBoundStatement statement = BindStatement(syntax.Thenstatement);
+        IBoundStatement? elsestatement = syntax.Elsestatement == null ? null : BindStatement(syntax.Elsestatement.Statement);
+        return new IfBoundStatement(condition, statement, elsestatement);
+    }
+
+    private IBoundStatement BindWhileStatement(WhileStatement syntax)
+    {
+        IBoundExpression condition = BindExpression(syntax.Condition);
+        IBoundStatement statement = BindStatement(syntax.Dostatement);
+        return new WhileBoundStatement(condition, statement);
+    }
+    
     private IBoundStatement BindVariableStatement(VariableStatement syntax)
     {
         string name = syntax.Variable.Text ?? "no";

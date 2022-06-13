@@ -52,6 +52,8 @@ public class Parser
         return Current.Type switch
         {
             SyntaxTokenType.OpenBracketToken => ParseBlockStatement(),
+            SyntaxTokenType.IfKeyword => ParseIfStatement(),
+            SyntaxTokenType.WhileKeyword => ParseWhileStatement(),
             SyntaxTokenType.VariableKeyword => ParseVariableStatement(),
             _ => ParseExpressionStatement()
         };
@@ -74,10 +76,43 @@ public class Parser
                 NextToken();
             }
         }
-            
+        
         SyntaxToken closedbracket = MatchToken(SyntaxTokenType.ClosedBracketToken);
             
         return new BlockStatement(openbracket, statements.ToImmutable(), closedbracket);
+    }
+
+    private StatementSyntax ParseIfStatement()
+    {
+        SyntaxToken ifkeyword = MatchToken(SyntaxTokenType.IfKeyword);
+        SyntaxToken openparen = MatchToken(SyntaxTokenType.OpenParenToken);
+        ExpressionSyntax condition = ParseAssignmentExpression();
+        SyntaxToken closeparen = MatchToken(SyntaxTokenType.ClosedParenToken);
+        StatementSyntax statements = ParseStatement();
+        ElseStatement? elseStatement = ParseElseStatement();
+        return new IfStatement(ifkeyword, openparen, condition, closeparen, statements, elseStatement);
+    }
+
+    private ElseStatement? ParseElseStatement()
+    {
+        if (Current.Type != SyntaxTokenType.ElseKeyword)
+        {
+            return null;
+        }
+
+        SyntaxToken elsekeyword = MatchToken(SyntaxTokenType.ElseKeyword);
+        StatementSyntax statements = ParseStatement();
+        return new ElseStatement(elsekeyword, statements);
+    }
+
+    private StatementSyntax ParseWhileStatement()
+    {
+        SyntaxToken whilekeyword = MatchToken(SyntaxTokenType.WhileKeyword);
+        SyntaxToken openparen = MatchToken(SyntaxTokenType.OpenParenToken);
+        ExpressionSyntax condition = ParseAssignmentExpression();
+        SyntaxToken closeparen = MatchToken(SyntaxTokenType.ClosedParenToken);
+        StatementSyntax statements = ParseStatement();
+        return new WhileStatement(whilekeyword, openparen, condition, closeparen, statements);
     }
 
     private StatementSyntax ParseVariableStatement()
