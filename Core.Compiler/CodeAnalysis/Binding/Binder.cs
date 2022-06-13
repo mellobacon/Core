@@ -20,6 +20,7 @@ public class Binder
             SyntaxTokenType.BlockStatement => BindBlockStatement((BlockStatement)syntax),
             SyntaxTokenType.IfStatement => BindIfStatement((IfStatement)syntax),
             SyntaxTokenType.WhileStatement => BindWhileStatement((WhileStatement)syntax),
+            SyntaxTokenType.ForStatement => BindForStatement((ForStatement)syntax),
             SyntaxTokenType.VariableStatement => BindVariableStatement((VariableStatement)syntax),
             SyntaxTokenType.ExpressionStatement => BindExpressionStatement((ExpressionStatement)syntax),
             _ => throw new Exception($"Unexpected statement syntax [{syntax.Type}] (Binder)")
@@ -51,6 +52,15 @@ public class Binder
         IBoundExpression condition = BindExpression(syntax.Condition);
         IBoundStatement statement = BindStatement(syntax.Dostatement);
         return new WhileBoundStatement(condition, statement);
+    }
+
+    private IBoundStatement BindForStatement(ForStatement syntax)
+    {
+        IBoundStatement init = BindStatement(syntax.Initializer);
+        IBoundExpression condition = BindExpression(syntax.Condition);
+        IBoundExpression iterator = BindExpression(syntax.Iterator);
+        IBoundStatement statement = BindStatement(syntax.Dostatement);
+        return new ForBoundStatement(init, condition, iterator, statement);
     }
     
     private IBoundStatement BindVariableStatement(VariableStatement syntax)

@@ -54,6 +54,7 @@ public class Parser
             SyntaxTokenType.OpenBracketToken => ParseBlockStatement(),
             SyntaxTokenType.IfKeyword => ParseIfStatement(),
             SyntaxTokenType.WhileKeyword => ParseWhileStatement(),
+            SyntaxTokenType.ForKeyword => ParseForStatement(),
             SyntaxTokenType.VariableKeyword => ParseVariableStatement(),
             _ => ParseExpressionStatement()
         };
@@ -117,6 +118,19 @@ public class Parser
         SyntaxToken closeparen = MatchToken(SyntaxTokenType.ClosedParenToken);
         StatementSyntax statements = ParseStatement();
         return new WhileStatement(whilekeyword, openparen, condition, closeparen, statements);
+    }
+
+    private StatementSyntax ParseForStatement()
+    {
+        SyntaxToken forkeyword = MatchToken(SyntaxTokenType.ForKeyword);
+        SyntaxToken openparen = MatchToken(SyntaxTokenType.OpenParenToken);
+        StatementSyntax init = ParseStatement();
+        ExpressionSyntax condition = ParseAssignmentExpression();
+        SyntaxToken semicolon = MatchToken(SyntaxTokenType.SemicolonToken);
+        ExpressionSyntax iterator = ParseAssignmentExpression();
+        SyntaxToken closeparen = MatchToken(SyntaxTokenType.ClosedParenToken);
+        StatementSyntax statement = ParseStatement();
+        return new ForStatement(forkeyword, openparen, init, condition, semicolon, iterator, closeparen, statement);
     }
 
     private StatementSyntax ParseVariableStatement()

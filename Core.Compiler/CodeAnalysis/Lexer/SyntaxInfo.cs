@@ -70,6 +70,7 @@ public static class SyntaxInfo
             "if" => SyntaxTokenType.IfKeyword,
             "else" => SyntaxTokenType.ElseKeyword,
             "while" => SyntaxTokenType.WhileKeyword,
+            "for" => SyntaxTokenType.ForKeyword,
             _ => SyntaxTokenType.VariableToken
         };
     }

@@ -42,6 +42,7 @@ public enum SyntaxTokenType
     IfKeyword,
     ElseKeyword,
     WhileKeyword,
+    ForKeyword,
 
     BlockStatement,
     ExpressionStatement,
@@ -49,7 +50,8 @@ public enum SyntaxTokenType
     IfStatement,
     ElseStatement,
     WhileStatement,
-    
+    ForStatement,
+
     BinaryExpression,
     UnaryExpression,
     LiteralExpression,

@@ -46,6 +46,14 @@ public class Evaluator
                     EvaluateStatement(w.Statement);
                 }
                 break;
+            case ForBoundStatement i:
+                EvaluateStatement(i.Init);
+                while ((bool)(EvaluateExpression(i.Condition) ?? false))
+                {
+                    EvaluateStatement(i.Statement);
+                    EvaluateExpression(i.Iter);
+                }
+                break;
             case ExpressionBoundStatement e:
                 _value = EvaluateExpression(e.Expression);
                 break;
@@ -54,6 +62,8 @@ public class Evaluator
                 Variables.SetVariable(v.Variable, value);
                 _value = value;
                 break;
+            default:
+                throw new Exception($"Unexpected node {root.BoundType}");
         }
     }
 
