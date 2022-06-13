@@ -34,6 +34,6 @@ public class IfStatement: StatementSyntax
         yield return Condition;
         yield return Closedparen;
         yield return Thenstatement;
-        yield return Elsestatement;
+        if (Elsestatement != null) yield return Elsestatement;
     }
 }
