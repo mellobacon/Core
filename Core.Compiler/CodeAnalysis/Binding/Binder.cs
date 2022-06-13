@@ -57,6 +57,7 @@ public class Binder
         string name = syntax.Variable.Text ?? "no";
         IBoundExpression expression = BindExpression(syntax.Expression);
         var variable = new Variable(name, expression.Type);
+        Variables.AddVariable(variable);
         return new VariableBoundStatement(variable, expression);
     }
     
@@ -119,17 +120,16 @@ public class Binder
         var variable = new Variable(name, expression.Type);
         if (Variables.GetVariable(name) is null)
         {
-            Variables.AddVariable(variable);
+            Errors.ReportVariableNoneExistent(syntax.VariableToken.TextSpan, name);
+            return new LiteralBoundExpression(0);
         }
-        
-        
 
         return new AssignmentBoundExpression(variable, expression, syntax.Operator, syntax.IsCompoundOp);
     }
 
     private IBoundExpression BindVariableExpression(VariableExpression syntax)
     {
-        string? name = syntax.VariableToken.Text;
+        string? name = syntax.VariableToken.Text ?? "no";
         Variable? variable = Variables.GetVariable(name);
 
         if (variable is null)
