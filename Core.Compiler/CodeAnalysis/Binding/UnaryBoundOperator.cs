@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Compiler.CodeAnalysis.Lexer;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding;
 
@@ -7,9 +8,9 @@ public class UnaryBoundOperator
 {
     private SyntaxTokenType SyntaxTokenType { get; }
     public UnaryOperatorType BoundType { get; }
-    public Type Result { get; }
+    public TypeSymbol Result { get; }
 
-    public UnaryBoundOperator(SyntaxTokenType type, UnaryOperatorType boundtype, Type result)
+    public UnaryBoundOperator(SyntaxTokenType type, UnaryOperatorType boundtype, TypeSymbol result)
     {
         SyntaxTokenType = type;
         BoundType = boundtype;
@@ -18,12 +19,12 @@ public class UnaryBoundOperator
     
     private static readonly UnaryBoundOperator[] _operations =
     {
-        new(SyntaxTokenType.MinusToken, UnaryOperatorType.Negation, typeof(int)),
-        new(SyntaxTokenType.MinusToken, UnaryOperatorType.Negation, typeof(float)),
-        new(SyntaxTokenType.BangToken, UnaryOperatorType.BooleanNegation, typeof(bool)),
+        new(SyntaxTokenType.MinusToken, UnaryOperatorType.Negation, TypeSymbol.Int),
+        new(SyntaxTokenType.MinusToken, UnaryOperatorType.Negation, TypeSymbol.Float),
+        new(SyntaxTokenType.BangToken, UnaryOperatorType.BooleanNegation, TypeSymbol.Bool),
     };
     
-    public static UnaryBoundOperator? GetOp(SyntaxTokenType kind, Type operandtype)
+    public static UnaryBoundOperator? GetOp(SyntaxTokenType kind, TypeSymbol operandtype)
     {
         foreach (UnaryBoundOperator op in _operations)
         {

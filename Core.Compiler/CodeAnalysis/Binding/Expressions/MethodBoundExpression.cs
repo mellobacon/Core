@@ -15,5 +15,5 @@ public class MethodBoundExpression : IBoundExpression
     }
 
     public BoundType BoundType => BoundType.MethodExpression;
-    public Type Type => Function._type;
+    public TypeSymbol Type => Function._type;
 }

@@ -1,7 +1,8 @@
 ﻿using System;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
 public interface IBoundExpression : IBindNode
 {
-    public Type Type { get; }
+    public TypeSymbol Type { get; }
 }

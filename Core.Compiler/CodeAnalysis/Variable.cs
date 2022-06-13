@@ -1,12 +1,13 @@
 ﻿using System;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis;
 
 public class Variable
 {
     public string Name { get; }
-    public Type Type { get; }
-    public Variable(string varName, Type resultType)
+    public TypeSymbol Type { get; }
+    public Variable(string varName, TypeSymbol resultType)
     {
         Name = varName;
         Type = resultType;

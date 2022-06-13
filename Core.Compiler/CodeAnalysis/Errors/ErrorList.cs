@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Compiler.CodeAnalysis.Lexer;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Errors;
 // TODO: Make the error messages less heehoo
@@ -23,9 +24,9 @@ public class ErrorList
     {
         return _errors.ToArray();
     }
-    public void ReportInvalidNumberConversion(TextSpan span, string num, object type)
+    public void ReportInvalidNumberConversion(TextSpan span, string num, TypeSymbol type)
     {
-        string message = $"Error - invalid number: Cannot convert {num} to {type}";
+        string message = $"Error - invalid number: Cannot convert {num} to {type.Type}";
         _errors.Add(new Error(span, message));
     }
 
@@ -42,15 +43,15 @@ public class ErrorList
         _errors.Add(new Error(span, message));
     }
 
-    public void ReportUndefinedBinaryOperator(TextSpan span, Type left, string? op, Type right)
+    public void ReportUndefinedBinaryOperator(TextSpan span, TypeSymbol left, string? op, TypeSymbol right)
     {
-        string message = $"Error - bad binary operator {op} cant be applied to {left} and {right}";
+        string message = $"Error - bad binary operator {op} cant be applied to {left.Type} and {right.Type}";
         _errors.Add(new Error(span, message));
     }
     
-    public void ReportUndefinedUnaryOperator(TextSpan span, string? op, Type operand)
+    public void ReportUndefinedUnaryOperator(TextSpan span, string? op, TypeSymbol operand)
     {
-        string message = $"Error - bad unary operator {op} cant be applied to {operand}";
+        string message = $"Error - bad unary operator {op} cant be applied to {operand.Type}";
         _errors.Add(new Error(span, message));
     }
 

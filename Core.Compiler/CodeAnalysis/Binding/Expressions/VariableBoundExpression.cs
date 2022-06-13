@@ -1,15 +1,16 @@
 ﻿using System;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
 
 public class VariableBoundExpression: IBoundExpression
 {
-    public Variable Variable { get; }
-    public VariableBoundExpression(Variable variable)
+    public VariableSymbol Variable { get; }
+    public VariableBoundExpression(VariableSymbol variable)
     {
         Variable = variable;
     }
 
     public BoundType BoundType => BoundType.VariableExpression;
-    public Type Type => Variable.Type;
+    public TypeSymbol Type => Variable.VarType;
 }

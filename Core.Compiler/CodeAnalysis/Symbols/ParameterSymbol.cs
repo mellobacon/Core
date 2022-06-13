@@ -4,11 +4,10 @@ namespace Core.Compiler.CodeAnalysis.Symbols;
 
 public class ParameterSymbol : Symbol
 {
-
-    public readonly Type ParamType;
+    private readonly Type _paramType;
     public ParameterSymbol(string name, Type type) : base(name)
     {
-        ParamType = type;
+        _paramType = type;
     }
 
     public override SymbolType Type => SymbolType.ParameterSymbol;

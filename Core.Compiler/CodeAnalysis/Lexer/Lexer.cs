@@ -1,4 +1,5 @@
 ﻿using Core.Compiler.CodeAnalysis.Errors;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Lexer;
 public class Lexer
@@ -52,8 +53,7 @@ public class Lexer
             }
             else
             {
-                // cant test it if it doesnt exist hehehe
-                //Errors.ReportInvalidNumberConversion(new TextSpan(_start, text.Length), text, typeof(int));
+                Errors.ReportInvalidNumberConversion(new TextSpan(_start, text.Length), text, TypeSymbol.Int);
             }
         }
         else if (type == NumberType.FloatType)
@@ -65,7 +65,7 @@ public class Lexer
             else
             {
                 // report error
-                Errors.ReportInvalidNumberConversion(new TextSpan(_start, text.Length), text, typeof(float));
+                Errors.ReportInvalidNumberConversion(new TextSpan(_start, text.Length), text, TypeSymbol.Float);
             }
         }
         else

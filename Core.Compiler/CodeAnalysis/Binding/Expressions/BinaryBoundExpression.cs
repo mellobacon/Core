@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
 public class BinaryBoundExpression : IBoundExpression
@@ -14,5 +15,5 @@ public class BinaryBoundExpression : IBoundExpression
     }
 
     public BoundType BoundType => BoundType.BinaryExpression;
-    public Type Type => Op.ResultType;
+    public TypeSymbol Type => Op.ResultType;
 }

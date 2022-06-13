@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding;
 
 public static class Variables
 {
-    private static readonly Dictionary<Variable, object?> _variableList = new();
+    private static readonly Dictionary<VariableSymbol, object?> _variableList = new();
 
     public static object? GetVariableValue(string name)
     {
-        foreach (Variable variable in _variableList.Keys)
+        foreach (VariableSymbol variable in _variableList.Keys)
         {
             if (variable.Name != name) continue;
             return _variableList[variable];
@@ -17,9 +18,9 @@ public static class Variables
         return null;
     }
 
-    public static Variable? GetVariable(string? name)
+    public static VariableSymbol? GetVariable(string? name)
     {
-        foreach (Variable variable in _variableList.Keys)
+        foreach (VariableSymbol variable in _variableList.Keys)
         {
             if (variable.Name != name) continue;
             return variable;
@@ -27,12 +28,12 @@ public static class Variables
         return null;
     }
 
-    public static void AddVariable(Variable variable)
+    public static void AddVariable(VariableSymbol variable)
     {
         _variableList[variable] = null;
     }
 
-    public static void SetVariable(Variable variable, object? value)
+    public static void SetVariable(VariableSymbol variable, object? value)
     {
         foreach (var v in _variableList.Keys)
         {

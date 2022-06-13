@@ -5,10 +5,10 @@ namespace Core.Compiler.CodeAnalysis.Binding.Statements;
 
 public class VariableBoundStatement : IBoundStatement
 {
-    public readonly Variable Variable;
+    public readonly VariableSymbol Variable;
     public readonly IBoundExpression Expression;
 
-    public VariableBoundStatement(Variable variable, IBoundExpression expression)
+    public VariableBoundStatement(VariableSymbol variable, IBoundExpression expression)
     {
         Variable = variable;
         Expression = expression;
