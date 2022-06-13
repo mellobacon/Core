@@ -61,7 +61,7 @@ public class ErrorList
         _errors.Add(new Error(span, message));
     }
 
-    public void ReportVariableNoneExistent(TextSpan span, string token)
+    public void ReportVariableNonExistent(TextSpan span, string token)
     {
         var message = $"Error - the variable '{token}' does not exist";
         _errors.Add(new Error(span, message));

@@ -132,7 +132,7 @@ public class Binder
         var variable = new VariableSymbol(name, expression.Type);
         if (Variables.GetVariable(name) is null)
         {
-            Errors.ReportVariableNoneExistent(syntax.VariableToken.TextSpan, name);
+            Errors.ReportVariableNonExistent(syntax.VariableToken.TextSpan, name);
             return new LiteralBoundExpression(0);
         }
 
@@ -146,7 +146,7 @@ public class Binder
 
         if (variable is null)
         {
-            Errors.ReportVariableNoneExistent(syntax.VariableToken.TextSpan, name);
+            Errors.ReportVariableNonExistent(syntax.VariableToken.TextSpan, name);
             return new LiteralBoundExpression(0);
         }
 
