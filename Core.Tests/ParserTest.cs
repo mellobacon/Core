@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser;
 using Core.Compiler.CodeAnalysis.Parser.Expressions;
+using Core.Compiler.CodeAnalysis.Parser.Statements;
 using Xunit;
 
 namespace Core.Tests;
@@ -32,10 +34,10 @@ public static class ParserTest
         }
     }
 
-    private static ExpressionSyntax ParseExpression(string text)
+    private static StatementSyntax ParseExpression(string text)
     {
-        SyntaxTree tree = SyntaxTree.Parse(text);
-        ExpressionSyntax root = tree.Root;
+        SyntaxTree tree = SyntaxTree.Parse(text); 
+        StatementSyntax root = tree.Root;
         return root;
     }
 
@@ -48,36 +50,40 @@ public static class ParserTest
         string? typetext1 = SyntaxInfo.GetText(type1);
         string? typetext2 = SyntaxInfo.GetText(type2);
 
-        var text = $"1 {typetext1} 2 {typetext2} 3";
-        ExpressionSyntax expression = ParseExpression(text);
+        var text = $"1 {typetext1} 2 {typetext2} 3;";
+        StatementSyntax expression = ParseExpression(text);
         
         // What the tree should look like depending on precedence
         using var e = new AssertingNumerator(expression);
         if (typeprecedence2 > typeprecedence1)
         {
-            e.AssertNode(SyntaxTokenType.BinaryExpression);
-                e.AssertNode(SyntaxTokenType.LiteralExpression);
-                    e.AssertToken(SyntaxTokenType.NumberToken, "1");
-            e.AssertToken(type1, typetext1);
-            e.AssertNode(SyntaxTokenType.BinaryExpression);
-                e.AssertNode(SyntaxTokenType.LiteralExpression);
-                    e.AssertToken(SyntaxTokenType.NumberToken, "2");
-                e.AssertToken(type2, typetext2);
-                e.AssertNode(SyntaxTokenType.LiteralExpression);
-                    e.AssertToken(SyntaxTokenType.NumberToken, "3");
-        }
-        else
-        {
-            e.AssertNode(SyntaxTokenType.BinaryExpression);
+            e.AssertNode(SyntaxTokenType.ExpressionStatement);
                 e.AssertNode(SyntaxTokenType.BinaryExpression);
                     e.AssertNode(SyntaxTokenType.LiteralExpression);
                         e.AssertToken(SyntaxTokenType.NumberToken, "1");
-                    e.AssertToken(type1, typetext1);
+                e.AssertToken(type1, typetext1);
+                e.AssertNode(SyntaxTokenType.BinaryExpression);
                     e.AssertNode(SyntaxTokenType.LiteralExpression);
                         e.AssertToken(SyntaxTokenType.NumberToken, "2");
                     e.AssertToken(type2, typetext2);
                     e.AssertNode(SyntaxTokenType.LiteralExpression);
-                        e.AssertToken(SyntaxTokenType.NumberToken, "3");   
+                        e.AssertToken(SyntaxTokenType.NumberToken, "3");
+            e.AssertToken(SyntaxTokenType.SemicolonToken, ";");
+        }
+        else
+        {
+            e.AssertNode(SyntaxTokenType.ExpressionStatement);
+                e.AssertNode(SyntaxTokenType.BinaryExpression);
+                    e.AssertNode(SyntaxTokenType.BinaryExpression);
+                        e.AssertNode(SyntaxTokenType.LiteralExpression);
+                            e.AssertToken(SyntaxTokenType.NumberToken, "1");
+                        e.AssertToken(type1, typetext1);
+                        e.AssertNode(SyntaxTokenType.LiteralExpression);
+                            e.AssertToken(SyntaxTokenType.NumberToken, "2");
+                        e.AssertToken(type2, typetext2);
+                        e.AssertNode(SyntaxTokenType.LiteralExpression);
+                            e.AssertToken(SyntaxTokenType.NumberToken, "3");
+            e.AssertToken(SyntaxTokenType.SemicolonToken, ";");
         }
     }
     
@@ -106,33 +112,40 @@ public static class ParserTest
     public static void Parser_Honors_Unary_Precedence(SyntaxTokenType type)
     {
         string? typetext = SyntaxInfo.GetText(type);
-        var numbertext = $"{typetext}1";
-        ExpressionSyntax numberedexpression = ParseExpression(numbertext);
+        var numbertext = $"{typetext}1;";
+        StatementSyntax numberedexpression = ParseExpression(numbertext);
         using var e = new AssertingNumerator(numberedexpression);
-        e.AssertNode(SyntaxTokenType.UnaryExpression);
-            e.AssertToken(type, typetext);
-            e.AssertNode(SyntaxTokenType.LiteralExpression);
-                e.AssertToken(SyntaxTokenType.NumberToken, "1");
+        e.AssertNode(SyntaxTokenType.ExpressionStatement);
+            e.AssertNode(SyntaxTokenType.UnaryExpression);
+                e.AssertToken(type, typetext);
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.NumberToken, "1");
+        e.AssertToken(SyntaxTokenType.SemicolonToken, ";");
     }
 
     [Fact]
     public static void Parser_Parses_Assignments()
     {
-        ExpressionSyntax expression = ParseExpression("x = 5");
+        StatementSyntax expression = ParseExpression("x = 5;");
         using var e = new AssertingNumerator(expression);
-        e.AssertNode(SyntaxTokenType.AssignmentExpression);
-            e.AssertToken(SyntaxTokenType.VariableToken, "x");
-            e.AssertToken(SyntaxTokenType.EqualsToken, "=");
-            e.AssertNode(SyntaxTokenType.LiteralExpression);
-                e.AssertToken(SyntaxTokenType.NumberToken, "5");
+        
+        e.AssertNode(SyntaxTokenType.ExpressionStatement);
+            e.AssertNode(SyntaxTokenType.AssignmentExpression);
+                e.AssertToken(SyntaxTokenType.VariableToken, "x");
+                e.AssertToken(SyntaxTokenType.EqualsToken, "=");
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.NumberToken, "5");
+        e.AssertToken(SyntaxTokenType.SemicolonToken, ";");        
     }
 
     [Fact]
     public static void Parser_Parses_Variables()
     {
-        ExpressionSyntax expression = ParseExpression("x");
+        StatementSyntax expression = ParseExpression("x;");
         using var e = new AssertingNumerator(expression);
-        e.AssertNode(SyntaxTokenType.VariableExpression);
-            e.AssertToken(SyntaxTokenType.VariableToken, "x");
+        e.AssertNode(SyntaxTokenType.ExpressionStatement);
+            e.AssertNode(SyntaxTokenType.VariableExpression);
+                e.AssertToken(SyntaxTokenType.VariableToken, "x");
+        e.AssertToken(SyntaxTokenType.SemicolonToken, ";");    
     }
 }
