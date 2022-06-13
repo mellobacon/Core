@@ -6,7 +6,7 @@ namespace Core.Compiler.CodeAnalysis.Symbols;
 
 public class Functions
 {
-    public static readonly FunctionSymbol Print = new("println", new ParameterSymbol("text", typeof(object)), TypeSymbol.Void);
+    public static readonly FunctionSymbol Print = new("println", new ParameterSymbol("text", TypeSymbol.Object), TypeSymbol.Void);
     
     internal static IEnumerable<FunctionSymbol?> GetAll() => 
         typeof(Functions).GetFields(BindingFlags.Public | BindingFlags.Static)

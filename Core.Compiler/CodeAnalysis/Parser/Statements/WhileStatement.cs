@@ -6,10 +6,10 @@ namespace Core.Compiler.CodeAnalysis.Parser.Statements;
 
 public class WhileStatement : StatementSyntax
 {
-    public SyntaxToken Whilekeyword { get; }
-    public SyntaxToken Openparen { get; }
+    private SyntaxToken Whilekeyword { get; }
+    private SyntaxToken Openparen { get; }
     public ExpressionSyntax Condition { get; }
-    public SyntaxToken Closeparen { get; }
+    private SyntaxToken Closeparen { get; }
     public StatementSyntax Dostatement { get; }
 
     public WhileStatement(SyntaxToken whilekeyword, SyntaxToken openparen, ExpressionSyntax condition, 

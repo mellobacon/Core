@@ -35,7 +35,7 @@ public static class Variables
 
     public static void SetVariable(VariableSymbol variable, object? value)
     {
-        foreach (var v in _variableList.Keys)
+        foreach (VariableSymbol v in _variableList.Keys)
         {
             if (v.Name == variable.Name)
             {

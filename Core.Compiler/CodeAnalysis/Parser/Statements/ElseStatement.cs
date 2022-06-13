@@ -5,7 +5,7 @@ namespace Core.Compiler.CodeAnalysis.Parser.Statements;
 
 public class ElseStatement : StatementSyntax
 {
-    public SyntaxToken Elsekeyword { get; }
+    private SyntaxToken Elsekeyword { get; }
     public StatementSyntax Statement { get; }
 
     public ElseStatement(SyntaxToken elsekeyword, StatementSyntax statement)

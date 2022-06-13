@@ -6,13 +6,13 @@ namespace Core.Compiler.CodeAnalysis.Parser.Statements;
 
 public class ForStatement : StatementSyntax
 {
-    public SyntaxToken Forkeyword { get; }
-    public SyntaxToken Openparen { get; }
+    private SyntaxToken Forkeyword { get; }
+    private SyntaxToken Openparen { get; }
     public StatementSyntax Initializer { get; }
     public ExpressionSyntax Condition { get; }
-    public SyntaxToken Semicolon { get; }
+    private SyntaxToken Semicolon { get; }
     public ExpressionSyntax Iterator { get; }
-    public SyntaxToken Closedparen { get; }
+    private SyntaxToken Closedparen { get; }
     public StatementSyntax Dostatement { get; }
 
     public ForStatement(SyntaxToken forkeyword, SyntaxToken openparen, StatementSyntax initializer, 

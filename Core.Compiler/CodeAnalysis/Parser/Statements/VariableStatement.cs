@@ -6,29 +6,29 @@ namespace Core.Compiler.CodeAnalysis.Parser.Statements;
 
 public class VariableStatement : StatementSyntax
 {
-    private readonly SyntaxToken Declarationkeyword;
+    private readonly SyntaxToken _declarationkeyword;
     public readonly SyntaxToken Variable;
-    private new readonly SyntaxToken Equals;
+    private readonly SyntaxToken _equals;
     public readonly ExpressionSyntax Expression;
-    private readonly SyntaxToken Semicolon;
+    private readonly SyntaxToken _semicolon;
     
     public VariableStatement(SyntaxToken declarationkeyword, SyntaxToken variable, SyntaxToken equals,
         ExpressionSyntax expression, SyntaxToken semicolon)
     {
-        Declarationkeyword = declarationkeyword;
+        _declarationkeyword = declarationkeyword;
         Variable = variable;
-        Equals = equals;
+        _equals = equals;
         Expression = expression;
-        Semicolon = semicolon;
+        _semicolon = semicolon;
     }
 
     public override SyntaxTokenType Type => SyntaxTokenType.VariableStatement;
     public override IEnumerable<SyntaxNode> GetChildren()
     {
-        yield return Declarationkeyword;
+        yield return _declarationkeyword;
         yield return Variable;
-        yield return Equals;
+        yield return _equals;
         yield return Expression;
-        yield return Semicolon;
+        yield return _semicolon;
     }
 }

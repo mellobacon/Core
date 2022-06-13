@@ -12,6 +12,6 @@ internal static class Program
             Prompt = "» ",
             MultilinePrompt = "→ "
         };
-        repl.Run(); //../../../testfile.corelang"
+        repl.Run("../../../testfile.corelang"); //../../../testfile.corelang"
     }
 }

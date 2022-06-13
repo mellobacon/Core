@@ -8,10 +8,10 @@ namespace Core.Compiler.CodeAnalysis.Parser.Statements;
 
 public class IfStatement: StatementSyntax
 {
-    public SyntaxToken Ifkeyword { get; }
-    public SyntaxToken Openparen { get; }
+    private SyntaxToken Ifkeyword { get; }
+    private SyntaxToken Openparen { get; }
     public ExpressionSyntax Condition { get; }
-    public SyntaxToken Closedparen { get; }
+    private SyntaxToken Closedparen { get; }
     public StatementSyntax Thenstatement { get; }
     public ElseStatement? Elsestatement { get; }
 

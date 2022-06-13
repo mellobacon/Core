@@ -6,7 +6,8 @@ public class SourceText
 {
     private readonly string _text;
     public ImmutableArray<TextLine> Lines;
-    public SourceText(string text)
+
+    private SourceText(string text)
     {
         _text = text;
         Lines = ParseLines(this, text);
@@ -96,5 +97,4 @@ public class SourceText
     public bool Contains(char i) => _text.Contains(i);
     public override string ToString() => _text;
     public string Substring(int start, int length) => _text.Substring(start, length);
-    public string Substring(TextSpan span) => Substring(span.Start, span.Length);
 }

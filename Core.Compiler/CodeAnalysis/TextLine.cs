@@ -19,6 +19,4 @@ public class TextLine
     }
 
     public override string ToString() => _text.Substring(Start, _lengthWithBreak);
-    public string ToString(int start, int length) => _text.Substring(Span);
-    public string ToString(TextSpan span) => ToString(span.Start, span.Length);
 }

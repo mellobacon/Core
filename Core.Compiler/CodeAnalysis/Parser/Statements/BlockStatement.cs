@@ -6,9 +6,9 @@ namespace Core.Compiler.CodeAnalysis.Parser.Statements;
 
 public class BlockStatement : StatementSyntax
 {
-    public SyntaxToken OpenBracket { get; }
+    private SyntaxToken OpenBracket { get; }
     public ImmutableArray<StatementSyntax> Statements { get; }
-    public SyntaxToken ClosedBracket { get; }
+    private SyntaxToken ClosedBracket { get; }
 
     public BlockStatement(SyntaxToken openBracket, ImmutableArray<StatementSyntax> statements, SyntaxToken closedBracket)
     {

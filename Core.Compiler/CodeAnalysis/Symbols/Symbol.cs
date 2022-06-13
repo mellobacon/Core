@@ -3,7 +3,8 @@
 public abstract class Symbol
 {
     public string Name { get; }
-    public Symbol(string name)
+
+    protected Symbol(string name)
     {
         Name = name;
     }

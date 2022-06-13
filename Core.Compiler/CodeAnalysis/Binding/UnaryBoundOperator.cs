@@ -10,7 +10,7 @@ public class UnaryBoundOperator
     public UnaryOperatorType BoundType { get; }
     public TypeSymbol Result { get; }
 
-    public UnaryBoundOperator(SyntaxTokenType type, UnaryOperatorType boundtype, TypeSymbol result)
+    private UnaryBoundOperator(SyntaxTokenType type, UnaryOperatorType boundtype, TypeSymbol result)
     {
         SyntaxTokenType = type;
         BoundType = boundtype;

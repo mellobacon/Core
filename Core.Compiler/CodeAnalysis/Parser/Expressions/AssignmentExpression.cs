@@ -8,7 +8,7 @@ public class AssignmentExpression : ExpressionSyntax
     private readonly SyntaxToken _equalsToken;
     public readonly ExpressionSyntax Expression;
     public readonly SyntaxToken Operator;
-    public bool IsCompoundOp;
+    public readonly bool IsCompoundOp;
     public AssignmentExpression(SyntaxToken variableToken, SyntaxToken equalsToken, ExpressionSyntax expression)
     {
         VariableToken = variableToken;

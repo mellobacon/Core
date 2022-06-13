@@ -33,6 +33,6 @@ public class SyntaxToken : SyntaxNode
         
     public override IEnumerable<SyntaxNode> GetChildren()
     {
-        return Enumerable.Empty<SyntaxNode>(); // Theres no node to return so fuck off
+        return Enumerable.Empty<SyntaxNode>();
     }
 }

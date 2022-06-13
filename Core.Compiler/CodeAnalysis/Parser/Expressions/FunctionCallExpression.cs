@@ -5,10 +5,10 @@ namespace Core.Compiler.CodeAnalysis.Parser.Expressions;
 
 public class FunctionCallExpression : ExpressionSyntax
 {
-    public SyntaxToken Name { get; }
-    public SyntaxToken OpenParen { get; }
+    private SyntaxToken Name { get; }
+    private SyntaxToken OpenParen { get; }
     public ExpressionSyntax Arg { get; }
-    public SyntaxToken ClosedParen { get; }
+    private SyntaxToken ClosedParen { get; }
 
     public FunctionCallExpression(SyntaxToken name, SyntaxToken openParen, ExpressionSyntax arg, SyntaxToken closedParen)
     {
