@@ -86,7 +86,7 @@ public class Parser
     {
         SyntaxToken ifkeyword = MatchToken(SyntaxTokenType.IfKeyword);
         SyntaxToken openparen = MatchToken(SyntaxTokenType.OpenParenToken);
-        ExpressionSyntax condition = ParseAssignmentExpression();
+        ExpressionSyntax condition = ParseBinaryExpression();
         SyntaxToken closeparen = MatchToken(SyntaxTokenType.ClosedParenToken);
         StatementSyntax statements = ParseStatement();
         ElseStatement? elseStatement = ParseElseStatement();
@@ -97,10 +97,14 @@ public class Parser
     {
         if (Current.Type != SyntaxTokenType.ElseKeyword)
         {
+            if (Current.Type is SyntaxTokenType.IfKeyword)
+            {
+                ParseStatement();
+            }
             return null;
         }
 
-        SyntaxToken elsekeyword = MatchToken(SyntaxTokenType.ElseKeyword);
+        SyntaxToken elsekeyword = NextToken();
         StatementSyntax statements = ParseStatement();
         return new ElseStatement(elsekeyword, statements);
     }
@@ -109,7 +113,7 @@ public class Parser
     {
         SyntaxToken whilekeyword = MatchToken(SyntaxTokenType.WhileKeyword);
         SyntaxToken openparen = MatchToken(SyntaxTokenType.OpenParenToken);
-        ExpressionSyntax condition = ParseAssignmentExpression();
+        ExpressionSyntax condition = ParseBinaryExpression();
         SyntaxToken closeparen = MatchToken(SyntaxTokenType.ClosedParenToken);
         StatementSyntax statements = ParseStatement();
         return new WhileStatement(whilekeyword, openparen, condition, closeparen, statements);
