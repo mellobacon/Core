@@ -78,7 +78,7 @@ public class Repl
             {
                 continue;
             }
-            ShowTree(tree.Root);
+            //ShowTree(tree.Root);
             
             // Evaluate the expression and print the output, along with any errors
             var compilation = new Compilation(tree);
@@ -87,7 +87,7 @@ public class Repl
             if (!result.Errors.Any())
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine(result.Value);
+                //Console.WriteLine(result.Value);
                 Console.ResetColor();
             }
             
@@ -101,9 +101,14 @@ public class Repl
                 if (error.ToString().Contains("Eof")) break;
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"({linenumber}, {character}): {error} at: ");
+                Console.WriteLine($"({linenumber}, {character}): {error}");
                 Console.ResetColor();
 
+                // dont print the extra stuff for files since the input is all read at once (TODO: Fix this)
+                if (path is not null)
+                {
+                    continue;
+                }
                 string prefix = text[..error.TextSpan.Start];
                 string e = text.Substring(error.TextSpan.Start, error.TextSpan.Length);
                 string suffix = text[error.TextSpan.End..];
