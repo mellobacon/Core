@@ -136,11 +136,12 @@ public class Parser
     private StatementSyntax ParseVariableStatement()
     {
         SyntaxToken keyword = MatchToken(SyntaxTokenType.VariableKeyword);
+        SyntaxToken vartype = MatchToken(SyntaxTokenType.VariableToken);
         SyntaxToken variable = MatchToken(SyntaxTokenType.VariableToken);
         SyntaxToken equals = MatchToken(SyntaxTokenType.EqualsToken);
         ExpressionSyntax expression = ParseAssignmentExpression();
         SyntaxToken semicolon = MatchToken(SyntaxTokenType.SemicolonToken);
-        return new VariableStatement(keyword, variable, equals, expression, semicolon);
+        return new VariableStatement(keyword, vartype, variable, equals, expression, semicolon);
     }
 
     private StatementSyntax ParseExpressionStatement()

@@ -66,16 +66,47 @@ public class Binder
     private IBoundStatement BindVariableStatement(VariableStatement syntax)
     {
         string name = syntax.Variable.Text ?? "no";
+        TypeSymbol type = BindVarType(syntax.VarType);
         IBoundExpression expression = BindExpression(syntax.Expression);
-        var variable = new VariableSymbol(name, expression.Type);
+        expression = TryConversion(syntax, expression, type);
+        var variable = new VariableSymbol(name, type);
         Variables.AddVariable(variable);
         return new VariableBoundStatement(variable, expression);
     }
-    
+
+    private TypeSymbol BindVarType(SyntaxToken token)
+    {
+        return token.Text switch
+        {
+            "int" => TypeSymbol.Int,
+            "float" => TypeSymbol.Float,
+            "double" => TypeSymbol.Double,
+            "string" => TypeSymbol.String,
+            "bool" => TypeSymbol.Bool,
+            _ => TypeSymbol.Error
+        };
+    }
+
     private IBoundStatement BindExpressionStatement(ExpressionStatement syntax)
     {
         IBoundExpression expression = BindExpression(syntax.Expression);
         return new ExpressionBoundStatement(expression);
+    }
+
+    private IBoundExpression TryConversion(VariableStatement syntax, IBoundExpression expression, TypeSymbol type)
+    {
+        if (expression.Type != type)
+        {
+            if (type == TypeSymbol.Error)
+            {
+                Errors.ReportInvalidType(syntax.VarType.TextSpan, syntax.VarType.Text!);
+                return new ErrorBoundExpression();
+            }
+            Errors.ReportTypeConversionError(syntax.VarType.TextSpan, expression.Type.Name, type);
+            return new ErrorBoundExpression();
+        }
+
+        return expression;
     }
     
     private IBoundExpression BindExpression(ExpressionSyntax syntax)
@@ -133,7 +164,7 @@ public class Binder
         if (Variables.GetVariable(name) is null)
         {
             Errors.ReportVariableNonExistent(syntax.VariableToken.TextSpan, name);
-            return new LiteralBoundExpression(0);
+            return new ErrorBoundExpression();
         }
 
         return new AssignmentBoundExpression(variable, expression, syntax.Operator, syntax.IsCompoundOp);
@@ -141,13 +172,13 @@ public class Binder
 
     private IBoundExpression BindVariableExpression(VariableExpression syntax)
     {
-        string? name = syntax.VariableToken.Text ?? "no";
+        string name = syntax.VariableToken.Text ?? "unknown";
         VariableSymbol? variable = Variables.GetVariable(name);
 
         if (variable is null)
         {
             Errors.ReportVariableNonExistent(syntax.VariableToken.TextSpan, name);
-            return new LiteralBoundExpression(0);
+            return new ErrorBoundExpression();
         }
 
         return new VariableBoundExpression(variable);
