@@ -99,6 +99,30 @@ public static class EvaluatorTest
         Assert.Equal(errormessage, error);
     }
 
+    [Fact]
+    public static void Evaluator_Evaluates_IfElseStatement()
+    {
+        string input = @"if (2 > 5) { ""2""; } else { ""3""; }";
+        Result result = GetResult(input);
+        Assert.Equal("3", result.Value);
+    }
+    
+    [Fact]
+    public static void Evaluator_Evaluates_WhileStatement()
+    {
+        string input = @"let int x = 0; while (x <= 3) { x += 1; }";
+        Result result = GetResult(input);
+        Assert.Null(result.Value);
+    }
+    
+    [Fact]
+    public static void Evaluator_Evaluates_ForStatement()
+    {
+        string input = @"for (let int x = 0; x <= 3; x += 1) { print(x); }";
+        Result result = GetResult(input);
+        Assert.Null(result.Value);
+    }
+
     private static Result GetResult(string text)
     {
         SyntaxTree tree = SyntaxTree.Parse(text);
