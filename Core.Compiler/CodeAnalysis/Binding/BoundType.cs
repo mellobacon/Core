@@ -8,6 +8,8 @@ public enum BoundType
     VariableExpression,
     MethodExpression,
     
+    ErrorExpression,
+    
     BlockStatement,
     ExpressionStatement,
     VariableStatement,
