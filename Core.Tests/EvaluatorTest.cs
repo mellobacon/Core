@@ -56,7 +56,7 @@ public static class EvaluatorTest
             ("True && True;", true),
             ("True && False;", false),
             ("\"string\";", "string"),
-            ("let x = 5;", 5),
+            ("let int x = 5;", 5),
         };
         foreach ((string text, object value) in evals)
         {
@@ -80,7 +80,9 @@ public static class EvaluatorTest
             ("2||2;", "Error - bad binary operator || cant be applied to int and int"),
             ("100_", "Error - invalid token 100_"),
             ("-False;", "Error - bad unary operator - cant be applied to bool"),
-            ("!100;", "Error - bad unary operator ! cant be applied to int")
+            ("!100;", "Error - bad unary operator ! cant be applied to int"),
+            ("let void x = 10;", "Error - void is an invalid type"),
+            ("let string x = 10;", "Error - Cannot convert int to string")
         };
         foreach ((string text, string error) in evals)
         {
