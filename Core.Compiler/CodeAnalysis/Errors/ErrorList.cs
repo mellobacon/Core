@@ -65,4 +65,16 @@ public class ErrorList
         var message = $"Error - the variable '{token}' does not exist";
         _errors.Add(new Error(span, message));
     }
+
+    public void ReportInvalidType(TextSpan span, string type)
+    {
+        var message = $"Error - {type} is an invalid type";
+        _errors.Add(new Error(span, message));
+    }
+
+    public void ReportTypeConversionError(TextSpan span, string type, TypeSymbol expectedType)
+    {
+        var message = $"Error - Cannot convert {type} to {expectedType}";
+        _errors.Add(new Error(span, message));
+    }
 }
