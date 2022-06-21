@@ -3,6 +3,7 @@ using Core.Compiler.CodeAnalysis.Binding;
 using Core.Compiler.CodeAnalysis.Binding.Expressions;
 using Core.Compiler.CodeAnalysis.Binding.Statements;
 using Core.Compiler.CodeAnalysis.Lexer;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Evaluator;
 public class Evaluator
@@ -84,12 +85,27 @@ public class Evaluator
     private object? EvaluateMethod(IBoundExpression root)
     {
         if (root is not MethodBoundExpression m) return null;
-        foreach (IBoundExpression arg in m.Args)
+
+        if (m.Function == Functions.Print)
         {
-            object message = EvaluateExpression(arg)!;
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine(message);
-            Console.ResetColor();
+            foreach (IBoundExpression arg in m.Args)
+            {
+                object message = EvaluateExpression(arg)!;
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write(message);
+                Console.ResetColor();
+            }
+            Console.WriteLine();
+        }
+        else if (m.Function == Functions.PrintLn)
+        {
+            foreach (IBoundExpression arg in m.Args)
+            {
+                object message = EvaluateExpression(arg)!;
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(message);
+                Console.ResetColor();
+            }
         }
         return null;
     }

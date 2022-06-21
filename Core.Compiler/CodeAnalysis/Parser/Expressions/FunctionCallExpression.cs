@@ -6,7 +6,7 @@ namespace Core.Compiler.CodeAnalysis.Parser.Expressions;
 
 public class FunctionCallExpression : ExpressionSyntax
 {
-    private SyntaxToken Name { get; }
+    public SyntaxToken Name { get; }
     private SyntaxToken OpenParen { get; }
     public Parameters<ExpressionSyntax> Args { get; }
     private SyntaxToken ClosedParen { get; }

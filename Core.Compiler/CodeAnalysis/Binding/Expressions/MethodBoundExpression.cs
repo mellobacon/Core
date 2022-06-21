@@ -6,7 +6,7 @@ namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
 
 public class MethodBoundExpression : IBoundExpression
 {
-    private FunctionSymbol Function { get; }
+    public FunctionSymbol Function { get; }
     public ImmutableArray<IBoundExpression> Args { get; }
 
     public MethodBoundExpression(FunctionSymbol function, ImmutableArray<IBoundExpression> args)

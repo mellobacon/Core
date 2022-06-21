@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Linq;
 using Core.Compiler.CodeAnalysis.Binding.Expressions;
 using Core.Compiler.CodeAnalysis.Binding.Statements;
 using Core.Compiler.CodeAnalysis.Errors;
@@ -197,8 +198,14 @@ public class Binder
             IBoundExpression boundarg = BindExpression(arg);
             args.Add(boundarg);
         }
-        
-        FunctionSymbol function = Functions.Print;
+
+        FunctionSymbol? function = Functions.GetAll().First(f => f?.Name == syntax.Name.Text);
+        if (function is null)
+        {
+            // return function doesnt exist error
+            return new ErrorBoundExpression();
+        }
+
         return new MethodBoundExpression(function, args.ToImmutable());
     }
 }
