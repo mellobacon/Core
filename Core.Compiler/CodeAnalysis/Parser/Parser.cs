@@ -4,6 +4,7 @@ using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser.Expressions;
 using Core.Compiler.CodeAnalysis.Parser.Statements;
+using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Parser;
 public class Parser
@@ -49,6 +50,19 @@ public class Parser
 
     private StatementSyntax ParseStatement()
     {
+        
+        // parse function declaration
+        if (Current.Type == SyntaxTokenType.VariableToken && Peek(1).Type == SyntaxTokenType.VariableToken &&
+            Peek(2).Type == SyntaxTokenType.OpenParenToken)
+        {
+            SyntaxToken functype = MatchToken(SyntaxTokenType.VariableToken);
+            SyntaxToken name = MatchToken(SyntaxTokenType.VariableToken);
+            SyntaxToken openparen = MatchToken(SyntaxTokenType.OpenParenToken);
+            var args = ParseArgs();
+            SyntaxToken closedparen = MatchToken(SyntaxTokenType.ClosedParenToken);
+            StatementSyntax statement = ParseStatement();
+            return new FunctionDeclarationExpression(functype, name, openparen, args, closedparen, statement);
+        }
         return Current.Type switch
         {
             SyntaxTokenType.OpenBracketToken => ParseBlockStatement(),
@@ -175,12 +189,35 @@ public class Parser
         {
             SyntaxToken name = MatchToken(SyntaxTokenType.VariableToken);
             SyntaxToken openparen = MatchToken(SyntaxTokenType.OpenParenToken);
-            ExpressionSyntax arg = ParseLiteralExpression();
+            var arg = ParseArgs();
             SyntaxToken closedparen = MatchToken(SyntaxTokenType.ClosedParenToken);
             return new FunctionCallExpression(name, openparen, arg, closedparen);
         }
 
         return ParseBinaryExpression();
+    }
+
+    private Parameters<ExpressionSyntax> ParseArgs()
+    {
+        ImmutableArray<SyntaxNode>.Builder x = ImmutableArray.CreateBuilder<SyntaxNode>();
+        var nextparam = true;
+        while (nextparam && Current.Type != SyntaxTokenType.ClosedParenToken 
+                         && Current.Type != SyntaxTokenType.EofToken)
+        {
+            ExpressionSyntax expression = ParseLiteralExpression();
+            x.Add(expression);
+            if (Current.Type == SyntaxTokenType.CommaToken)
+            {
+                SyntaxToken comma = MatchToken(SyntaxTokenType.CommaToken);
+                x.Add(comma);
+            }
+            else
+            {
+                nextparam = false;
+            }
+        }
+
+        return new Parameters<ExpressionSyntax>(x.ToImmutable());
     }
 
     private ExpressionSyntax ParseUnaryExpression(int precedence = 0)

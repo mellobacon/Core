@@ -105,6 +105,7 @@ public static class SyntaxInfo
             SyntaxTokenType.SlashEqualsToken => "/=",
             SyntaxTokenType.StarEqualsToken => "*=",
             SyntaxTokenType.ModuloEqualsToken => "%=",
+            SyntaxTokenType.CommaToken => ",",
             _ => null
         };
     }

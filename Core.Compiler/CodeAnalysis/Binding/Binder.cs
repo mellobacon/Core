@@ -191,8 +191,14 @@ public class Binder
 
     private IBoundExpression BindMethodExpression(FunctionCallExpression syntax)
     {
-        IBoundExpression arg = BindExpression(syntax.Arg);
+        ImmutableArray<IBoundExpression>.Builder args = ImmutableArray.CreateBuilder<IBoundExpression>();
+        foreach (ExpressionSyntax arg in syntax.Args)
+        {
+            IBoundExpression boundarg = BindExpression(arg);
+            args.Add(boundarg);
+        }
+        
         FunctionSymbol function = Functions.Print;
-        return new MethodBoundExpression(function, arg);
+        return new MethodBoundExpression(function, args.ToImmutable());
     }
 }

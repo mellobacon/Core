@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
@@ -6,12 +7,12 @@ namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
 public class MethodBoundExpression : IBoundExpression
 {
     private FunctionSymbol Function { get; }
-    public IBoundExpression Arg { get; }
+    public ImmutableArray<IBoundExpression> Args { get; }
 
-    public MethodBoundExpression(FunctionSymbol function, IBoundExpression arg)
+    public MethodBoundExpression(FunctionSymbol function, ImmutableArray<IBoundExpression> args)
     {
         Function = function;
-        Arg = arg;
+        Args = args;
     }
 
     public BoundType BoundType => BoundType.MethodExpression;

@@ -249,6 +249,10 @@ public class Lexer
                 _type = SyntaxTokenType.SemicolonToken;
                 Advance(1);
                 break;
+            case ',':
+                _type = SyntaxTokenType.CommaToken;
+                Advance(1);
+                break;
             default:
                 Errors.ReportBadCharacter(Current, _position);
                 Advance(1);

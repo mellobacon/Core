@@ -84,10 +84,13 @@ public class Evaluator
     private object? EvaluateMethod(IBoundExpression root)
     {
         if (root is not MethodBoundExpression m) return null;
-        object message = EvaluateExpression(m.Arg)!;
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        Console.WriteLine(message);
-        Console.ResetColor();
+        foreach (IBoundExpression arg in m.Args)
+        {
+            object message = EvaluateExpression(arg)!;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
         return null;
     }
 

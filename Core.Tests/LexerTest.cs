@@ -86,6 +86,7 @@ public static class LexerTest
             ("\")(**^%^&(*uyGYU5789324U3J\"", SyntaxTokenType.StringToken),
             
             (";", SyntaxTokenType.SemicolonToken),
+            (",", SyntaxTokenType.CommaToken),
         };
         foreach ((string text, SyntaxTokenType type) in tokens)
         {

@@ -59,7 +59,9 @@ public enum SyntaxTokenType
     AssignmentExpression,
     VariableExpression,
     FunctionCallExpression,
+    FunctionDeclarationExpression,
 
+    CommaToken,
     WhiteSpaceToken,
     SemicolonToken,
     BadToken,
