@@ -126,7 +126,7 @@ public static class EvaluatorTest
     private static Result GetResult(string text)
     {
         SyntaxTree tree = SyntaxTree.Parse(text);
-        var compilation = new Compilation(tree);
+        var compilation = new Compilation(null, tree);
         Result result = compilation.Evaluate();
         return result;
     }
