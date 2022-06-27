@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.Compiler.CodeAnalysis.Binding;
 using Core.Compiler.CodeAnalysis.Binding.Expressions;
 using Core.Compiler.CodeAnalysis.Binding.Statements;
@@ -8,11 +9,13 @@ using Core.Compiler.CodeAnalysis.Symbols;
 namespace Core.Compiler.CodeAnalysis.Evaluator;
 public class Evaluator
 {
+    private readonly Dictionary<VariableSymbol, object?> _scope;
     private readonly IBoundStatement _root;
     private object? _value;
-    public Evaluator(IBoundStatement root)
+    public Evaluator(IBoundStatement root, Dictionary<VariableSymbol, object?> scope)
     {
         _root = root;
+        _scope = scope;
     }
 
     public object? Evaluate()
@@ -60,7 +63,7 @@ public class Evaluator
                 break;
             case VariableBoundStatement v:
                 object? value = EvaluateExpression(v.Expression);
-                Variables.SetVariable(v.Variable, value);
+                _scope[v.Variable] = value;
                 _value = value;
                 break;
             default:
@@ -124,40 +127,40 @@ public class Evaluator
             if (value is float)
             {
                 temp = Convert.ToSingle(value);
-                variableValue = Convert.ToSingle(Variables.GetVariableValue(a.Variable.Name) ?? 0);
+                variableValue = Convert.ToSingle(_scope[a.Variable] ?? 0);
             }
             else if (value is int)
             {
                 temp = (int)value;
-                variableValue = (int)(Variables.GetVariableValue(a.Variable.Name) ?? 0);
+                variableValue = (int)(_scope[a.Variable] ?? 0);
             }
             
             switch (a.Operator.Type)
             {
                 case SyntaxTokenType.PlusToken:
                     value = variableValue + temp;
-                    Variables.SetVariable(a.Variable, value);
+                    _scope[a.Variable] = value;
                     return value;
                 case SyntaxTokenType.MinusToken:
                     value = variableValue - temp;
-                    Variables.SetVariable(a.Variable, value);
+                    _scope[a.Variable] = value;
                     return value;
                 case SyntaxTokenType.SlashToken:
                     value = variableValue / temp;
-                    Variables.SetVariable(a.Variable, value);
+                    _scope[a.Variable] = value;
                     return value;
                 case SyntaxTokenType.StarToken:
                     value = variableValue * temp;
-                    Variables.SetVariable(a.Variable, value);
+                    _scope[a.Variable] = value;
                     return value;
                 case SyntaxTokenType.ModuloToken:
                     value = variableValue % temp;
-                    Variables.SetVariable(a.Variable, value);
+                    _scope[a.Variable] = value;
                     return value;
             }
         }
-        
-        Variables.SetVariable(a.Variable, value);
+
+        _scope[a.Variable] = value;
 
         return value;
     }
@@ -231,7 +234,7 @@ public class Evaluator
     private object? EvaluateVariableExpression(IBoundExpression root)
     {
         if (root is not VariableBoundExpression v) return null;
-        return Variables.GetVariableValue(v.Variable.Name);
+        return _scope[v.Variable];
     }
 
     private object? EvaluateLiteralExpression(IBoundExpression root)

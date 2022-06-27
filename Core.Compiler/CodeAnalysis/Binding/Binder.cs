@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Core.Compiler.CodeAnalysis.Binding.Expressions;
@@ -12,9 +13,43 @@ using Core.Compiler.CodeAnalysis.Symbols;
 namespace Core.Compiler.CodeAnalysis.Binding;
 public class Binder
 {
+    private Scope? _scope;
     public ErrorList Errors { get; } = new();
+    
+    public GlobalScope BindScope(GlobalScope? scope, StatementSyntax syntax)
+    {
+        // put each scope in a stack and pop it when we finish with it
+        var scopeStack = new Stack<GlobalScope>();
+        
+        if (scope is null)
+        {
+            _scope = new Scope(_scope);
+            scope = new GlobalScope(scope, new ExpressionBoundStatement(new ErrorBoundExpression()));
+        }
+        while (scope is not null)
+        {
+            scopeStack.Push(scope);
+            scope = scope._GlobalScope;
+        }
 
-    public IBoundStatement BindStatement(StatementSyntax syntax)
+        Scope? currentScope = null;
+        while (scopeStack.Count > 0)
+        {
+            scope = scopeStack.Pop();
+            var localscope = new Scope(currentScope);
+            foreach (VariableSymbol variable in scope.Variables.Keys)
+            {
+                localscope.AddVariable(variable);
+            }
+            currentScope = localscope;
+        }
+
+        _scope = currentScope;
+        IBoundStatement statement = BindStatement(syntax);
+        return new GlobalScope(scope, statement);
+    }
+
+    private IBoundStatement BindStatement(StatementSyntax syntax)
     {
         return syntax.Type switch
         {
@@ -31,11 +66,13 @@ public class Binder
     private IBoundStatement BindBlockStatement(BlockStatement syntax)
     {
         ImmutableArray<IBoundStatement>.Builder statements = ImmutableArray.CreateBuilder<IBoundStatement>();
+        _scope = new Scope(_scope);
         foreach (StatementSyntax statement in syntax.Statements)
         {
             IBoundStatement s = BindStatement(statement);
             statements.Add(s);
         }
+        _scope = _scope.ParentScope;
 
         return new BlockBoundStatement(statements.ToImmutable());
     }
@@ -71,7 +108,7 @@ public class Binder
         IBoundExpression expression = BindExpression(syntax.Expression);
         expression = TryConversion(syntax, expression, type);
         var variable = new VariableSymbol(name, type);
-        Variables.AddVariable(variable);
+        _scope?.AddVariable(variable);
         return new VariableBoundStatement(variable, expression);
     }
 
@@ -162,7 +199,7 @@ public class Binder
         string name = syntax.VariableToken.Text!;
         IBoundExpression expression = BindExpression(syntax.Expression);
         var variable = new VariableSymbol(name, expression.Type);
-        if (Variables.GetVariable(name) is null)
+        if (_scope!.GetVariable(name) is null)
         {
             Errors.ReportVariableNonExistent(syntax.VariableToken.TextSpan, name);
             return new ErrorBoundExpression();
@@ -174,7 +211,7 @@ public class Binder
     private IBoundExpression BindVariableExpression(VariableExpression syntax)
     {
         string name = syntax.VariableToken.Text ?? "unknown";
-        VariableSymbol? variable = Variables.GetVariable(name);
+        VariableSymbol? variable = _scope!.GetVariable(name);
 
         if (variable is null)
         {
