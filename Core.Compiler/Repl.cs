@@ -24,6 +24,8 @@ public class Repl
      */
     public string MultilinePrompt = "#";
 
+    private Compilation? _previousCompilation;
+
     /**
      * <summary>Runs the compiler. If there is no argument specified, it will run via inputs from the cmd.</summary>
      * <param name="path">The path to a text file</param>
@@ -59,7 +61,6 @@ public class Repl
             else // Get input from the file
             {
                 input = file!.ReadLine();
-                Console.WriteLine(input);
             }
 
             // Process the input
@@ -78,10 +79,18 @@ public class Repl
             {
                 continue;
             }
-            //ShowTree(tree.Root);
             
             // Evaluate the expression and print the output, along with any errors
-            var compilation = new Compilation(tree);
+            Compilation compilation;
+            if (_previousCompilation is null)
+            {
+                compilation = new Compilation(null, tree);
+            }
+            else
+            {
+                compilation = _previousCompilation.Continue(tree);
+            }
+            
             Result result = compilation.Evaluate();
 
             if (!result.Errors.Any())
@@ -89,6 +98,7 @@ public class Repl
                 Console.ForegroundColor = ConsoleColor.Green;
                 //Console.WriteLine(result.Value);
                 Console.ResetColor();
+                _previousCompilation = compilation;
             }
             
             SourceText sourcetext = tree.Text;
