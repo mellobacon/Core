@@ -11,19 +11,8 @@ public class Scope
     {
         ParentScope = parent;
     }
-    
-    private static readonly Dictionary<VariableSymbol, object?> _variableList = new();
 
-    public object? GetVariableValue(string name)
-    {
-        foreach (VariableSymbol variable in _variableList.Keys)
-        {
-            if (variable.Name != name) continue;
-            return _variableList[variable];
-        }
-
-        return null;
-    }
+    private readonly Dictionary<VariableSymbol, object?> _variableList = new();
 
     public VariableSymbol? GetVariable(string? name)
     {
@@ -32,28 +21,21 @@ public class Scope
             if (variable.Name != name) continue;
             return variable;
         }
-        return null;
+
+        return ParentScope?.GetVariable(name);
     }
 
-    public void AddVariable(VariableSymbol variable)
+    public bool AddVariable(VariableSymbol variable)
     {
-        _variableList[variable] = null;
-    }
-
-    public void SetVariable(VariableSymbol variable, object? value)
-    {
-        foreach (VariableSymbol v in _variableList.Keys)
+        if (_variableList.ContainsKey(variable))
         {
-            if (v.Name == variable.Name)
-            {
-                _variableList[v] = value;
-                return;
-            }
+            return false;
         }
-        _variableList[variable] = value;
+        _variableList.Add(variable, null);
+        return true;
     }
-    
-    public static Dictionary<VariableSymbol, object?> GetVariables()
+
+    public Dictionary<VariableSymbol, object?> GetVariables()
     {
         return _variableList;
     }

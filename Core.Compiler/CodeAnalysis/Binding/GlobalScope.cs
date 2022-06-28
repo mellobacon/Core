@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.Compiler.CodeAnalysis.Binding.Statements;
+using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding;
@@ -11,11 +11,14 @@ public class GlobalScope
     public IBoundStatement Statement { get; }
 
     public Dictionary<VariableSymbol, object?> Variables { get; }
+
+    public ErrorList Errors { get; }
     
-    public GlobalScope(GlobalScope? scope, IBoundStatement statement)
+    public GlobalScope(GlobalScope? globalScope, IBoundStatement statement, Dictionary<VariableSymbol, object?> variables, ErrorList errors)
     {
-        _GlobalScope = scope;
+        _GlobalScope = globalScope;
         Statement = statement;
-        Variables = Scope.GetVariables();
+        Variables = variables;
+        Errors = errors;
     }
 }

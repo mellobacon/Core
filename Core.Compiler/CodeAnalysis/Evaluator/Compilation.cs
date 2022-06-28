@@ -16,8 +16,7 @@ public class Compilation
         _previousCompilation = previousComp;
         _tree = tree;
     }
-
-    // this is used to set any previous compilation
+    
     public Compilation Continue(SyntaxTree tree)
     {
         return new Compilation(this, tree);
@@ -29,10 +28,10 @@ public class Compilation
     {
         get
         {
+            // TODO: make a new scope for top level statements
             if (_globalScope is null)
             {
-                var binder = new Binder();
-                GlobalScope globalscope = binder.BindScope(_previousCompilation?._globalScope, _tree.Root);
+                GlobalScope globalscope = Binder.BindScope(_previousCompilation?._globalScope, _tree.Root);
                 // replace scope with other if theres two to prevent thread lock
                 Interlocked.CompareExchange(ref _globalScope, globalscope, null);
             }
@@ -43,11 +42,9 @@ public class Compilation
     
     public Result Evaluate()
     {
-        var binder = new Binder();
         GlobalScope globalscope = GlobalScope;
-        //IBoundStatement expression = binder.BindStatement(_tree.Root);
         IBoundStatement expression = globalscope.Statement;
-        _tree.Errors.Concat(binder.Errors);
+        _tree.Errors.Concat(globalscope.Errors);
         ErrorList errors = _tree.Errors;
         var evaluator = new Evaluator(expression, globalscope.Variables);
         _value = evaluator.Evaluate();

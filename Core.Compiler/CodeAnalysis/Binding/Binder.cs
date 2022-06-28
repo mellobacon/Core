@@ -14,18 +14,16 @@ namespace Core.Compiler.CodeAnalysis.Binding;
 public class Binder
 {
     private Scope? _scope;
-    public ErrorList Errors { get; } = new();
-    
-    public GlobalScope BindScope(GlobalScope? scope, StatementSyntax syntax)
+    private ErrorList Errors { get; } = new();
+
+    private Binder(Scope? parent)
     {
-        // put each scope in a stack and pop it when we finish with it
+        _scope = new Scope(parent);
+    }
+    public static GlobalScope BindScope(GlobalScope? scope, StatementSyntax syntax)
+    {
         var scopeStack = new Stack<GlobalScope>();
         
-        if (scope is null)
-        {
-            _scope = new Scope(_scope);
-            scope = new GlobalScope(scope, new ExpressionBoundStatement(new ErrorBoundExpression()));
-        }
         while (scope is not null)
         {
             scopeStack.Push(scope);
@@ -44,9 +42,10 @@ public class Binder
             currentScope = localscope;
         }
 
-        _scope = currentScope;
-        IBoundStatement statement = BindStatement(syntax);
-        return new GlobalScope(scope, statement);
+        var binder = new Binder(currentScope);
+        IBoundStatement statement = binder.BindStatement(syntax);
+        var variables = binder._scope!.GetVariables();
+        return new GlobalScope(scope, statement, variables, binder.Errors);
     }
 
     private IBoundStatement BindStatement(StatementSyntax syntax)
@@ -66,11 +65,10 @@ public class Binder
     private IBoundStatement BindBlockStatement(BlockStatement syntax)
     {
         ImmutableArray<IBoundStatement>.Builder statements = ImmutableArray.CreateBuilder<IBoundStatement>();
-        _scope = new Scope(_scope);
+        _scope = new Scope(_scope!);
         foreach (StatementSyntax statement in syntax.Statements)
         {
-            IBoundStatement s = BindStatement(statement);
-            statements.Add(s);
+            statements.Add(BindStatement(statement));
         }
         _scope = _scope.ParentScope;
 
@@ -103,12 +101,15 @@ public class Binder
     
     private IBoundStatement BindVariableStatement(VariableStatement syntax)
     {
-        string name = syntax.Variable.Text ?? "no";
+        string name = syntax.Variable.Text;
         TypeSymbol type = BindVarType(syntax.VarType);
         IBoundExpression expression = BindExpression(syntax.Expression);
         expression = TryConversion(syntax, expression, type);
         var variable = new VariableSymbol(name, type);
-        _scope?.AddVariable(variable);
+        if (!_scope!.AddVariable(variable))
+        {
+            Errors.ReportVariableAlreadyExists(syntax.Variable.TextSpan, name);
+        }
         return new VariableBoundStatement(variable, expression);
     }
 
@@ -124,6 +125,8 @@ public class Binder
             _ => TypeSymbol.Error
         };
     }
+    
+    
 
     private IBoundStatement BindExpressionStatement(ExpressionStatement syntax)
     {
@@ -137,7 +140,7 @@ public class Binder
         {
             if (type == TypeSymbol.Error)
             {
-                Errors.ReportInvalidType(syntax.VarType.TextSpan, syntax.VarType.Text!);
+                Errors.ReportInvalidType(syntax.VarType.TextSpan, syntax.VarType.Text);
                 return new ErrorBoundExpression();
             }
             Errors.ReportTypeConversionError(syntax.VarType.TextSpan, expression.Type.Name, type);
@@ -196,21 +199,22 @@ public class Binder
 
     private IBoundExpression BindAssignmentExpression(AssignmentExpression syntax)
     {
-        string name = syntax.VariableToken.Text!;
+        string name = syntax.VariableToken.Text;
         IBoundExpression expression = BindExpression(syntax.Expression);
-        var variable = new VariableSymbol(name, expression.Type);
         if (_scope!.GetVariable(name) is null)
         {
             Errors.ReportVariableNonExistent(syntax.VariableToken.TextSpan, name);
-            return new ErrorBoundExpression();
+            return expression;
         }
+
+        var variable = _scope.GetVariable(name);
 
         return new AssignmentBoundExpression(variable, expression, syntax.Operator, syntax.IsCompoundOp);
     }
 
     private IBoundExpression BindVariableExpression(VariableExpression syntax)
     {
-        string name = syntax.VariableToken.Text ?? "unknown";
+        string name = syntax.VariableToken.Text;
         VariableSymbol? variable = _scope!.GetVariable(name);
 
         if (variable is null)
@@ -232,8 +236,7 @@ public class Binder
         ImmutableArray<IBoundExpression>.Builder args = ImmutableArray.CreateBuilder<IBoundExpression>();
         foreach (ExpressionSyntax arg in syntax.Args)
         {
-            IBoundExpression boundarg = BindExpression(arg);
-            args.Add(boundarg);
+            args.Add(BindExpression(arg));
         }
 
         FunctionSymbol? function = Functions.GetAll().First(f => f?.Name == syntax.Name.Text);

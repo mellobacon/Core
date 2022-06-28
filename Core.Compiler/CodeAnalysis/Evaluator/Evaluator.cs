@@ -127,7 +127,7 @@ public class Evaluator
             if (value is float)
             {
                 temp = Convert.ToSingle(value);
-                variableValue = Convert.ToSingle(_scope[a.Variable] ?? 0);
+                variableValue = Convert.ToSingle(_scope[a.Variable]);
             }
             else if (value is int)
             {
@@ -233,7 +233,8 @@ public class Evaluator
 
     private object? EvaluateVariableExpression(IBoundExpression root)
     {
-        if (root is not VariableBoundExpression v) return null;
+        // the scope should not be null since i want top level statements so until then this will have to do
+        if (root is not VariableBoundExpression v || _scope.Count == 0) return null;
         return _scope[v.Variable];
     }
 

@@ -66,6 +66,12 @@ public class ErrorList
         _errors.Add(new Error(span, message));
     }
 
+    public void ReportVariableAlreadyExists(TextSpan span, string token)
+    {
+        var message = $"Error - {token} already exists";
+        _errors.Add(new Error(span, message));
+    }
+
     public void ReportInvalidType(TextSpan span, string type)
     {
         var message = $"Error - {type} is an invalid type";
