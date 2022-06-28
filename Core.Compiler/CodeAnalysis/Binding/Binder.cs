@@ -207,7 +207,7 @@ public class Binder
             return expression;
         }
 
-        var variable = _scope.GetVariable(name);
+        VariableSymbol? variable = _scope.GetVariable(name);
 
         return new AssignmentBoundExpression(variable, expression, syntax.Operator, syntax.IsCompoundOp);
     }

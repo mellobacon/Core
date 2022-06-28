@@ -27,10 +27,14 @@ public class Scope
 
     public bool AddVariable(VariableSymbol variable)
     {
-        if (_variableList.ContainsKey(variable))
+        foreach (VariableSymbol v in _variableList.Keys)
         {
-            return false;
+            if (v.Name == variable.Name)
+            {
+                return false;
+            }
         }
+        
         _variableList.Add(variable, null);
         return true;
     }
