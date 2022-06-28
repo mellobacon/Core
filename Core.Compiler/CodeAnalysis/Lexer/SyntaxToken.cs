@@ -5,14 +5,14 @@ using Core.Compiler.CodeAnalysis.Parser;
 namespace Core.Compiler.CodeAnalysis.Lexer;
 public class SyntaxToken : SyntaxNode
 {
-    public readonly string? Text;
+    public readonly string Text;
     public readonly object? Value;
     public readonly int Position;
     public TextSpan TextSpan
     {
         get
         {
-            if (Text != null)
+            if (string.IsNullOrWhiteSpace(Text))
             {
                 return new TextSpan(Position - Text.Length, Text.Length);
             }
@@ -23,7 +23,7 @@ public class SyntaxToken : SyntaxNode
 
     public override SyntaxTokenType Type { get; }
 
-    public SyntaxToken(string? text, object? value, SyntaxTokenType type, int position)
+    public SyntaxToken(string text, object? value, SyntaxTokenType type, int position)
     {
         Text = text;
         Value = value;

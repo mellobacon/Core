@@ -81,7 +81,7 @@ public class Lexer
         _start = _position;
         _value = null;
         _type = SyntaxTokenType.BadToken;
-        string? text = null;
+        var text = string.Empty;
 
         switch (Current)
         {
@@ -264,7 +264,7 @@ public class Lexer
             text = SyntaxInfo.GetText(_type);
         }
 
-        return new SyntaxToken(text, _value, _type, _position);
+        return new SyntaxToken(text!, _value, _type, _position);
     }
     
     private string LexNumber()
