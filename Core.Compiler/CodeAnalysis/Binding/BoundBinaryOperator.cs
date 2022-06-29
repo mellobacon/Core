@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Compiler.CodeAnalysis.Lexer;
+﻿using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding;
@@ -25,8 +24,7 @@ public class BoundBinaryOperator
 
     private BoundBinaryOperator(BinaryOperatorType boundType, SyntaxTokenType syntaxTokenType, TypeSymbol type) : this(
         boundType, syntaxTokenType, type, type, type) {}
-
-    // defines what counts as a valid binary expression...i think
+    
     private static readonly BoundBinaryOperator[] _operations =
     {
         new(BinaryOperatorType.Addition, SyntaxTokenType.PlusToken, TypeSymbol.Int),

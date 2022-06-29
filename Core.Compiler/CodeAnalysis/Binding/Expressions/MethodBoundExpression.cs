@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
@@ -16,5 +15,5 @@ public class MethodBoundExpression : IBoundExpression
     }
 
     public BoundType BoundType => BoundType.MethodExpression;
-    public TypeSymbol Type => Function._type;
+    public TypeSymbol Type => Function.FunctionType;
 }

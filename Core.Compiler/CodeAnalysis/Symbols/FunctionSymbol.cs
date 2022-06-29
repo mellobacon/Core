@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 
 namespace Core.Compiler.CodeAnalysis.Symbols;
 
 public class FunctionSymbol : Symbol
 {
-    public readonly TypeSymbol _type;
+    public readonly TypeSymbol FunctionType;
     private ImmutableArray<ParameterSymbol> Param { get; }
 
-    public FunctionSymbol(string name, ImmutableArray<ParameterSymbol> param, TypeSymbol type) : base(name)
+    public FunctionSymbol(string name, ImmutableArray<ParameterSymbol> param, TypeSymbol functionType) : base(name)
     {
-        _type = type;
+        FunctionType = functionType;
         Param = param;
     }
 

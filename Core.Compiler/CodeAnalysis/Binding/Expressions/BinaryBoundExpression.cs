@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Compiler.CodeAnalysis.Symbols;
+﻿using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
 public class BinaryBoundExpression : IBoundExpression

@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Compiler.CodeAnalysis.Lexer;
+﻿using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding.Expressions;

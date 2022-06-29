@@ -43,7 +43,6 @@ public class Repl
         
         while (true)
         {
-            // Get the input depending if its from the cmd or a file
             string? input;
             if (path is null) // Get input from the cmd
             {
@@ -62,18 +61,15 @@ public class Repl
             {
                 input = file!.ReadLine();
             }
-
-            // Process the input
+            
             bool isblank = string.IsNullOrWhiteSpace(input);
             if (isblank && textbuilder.Length == 0)
             {
                 break;
             }
-            // Collect every line of input to be evaluated
             textbuilder.AppendLine(input);
             var text = textbuilder.ToString();
-
-            // Get and print the syntax tree. This is for transparency when parsing.
+            
             SyntaxTree tree = SyntaxTree.Parse(text);
             if (!isblank && tree.Errors.Any())
             {
@@ -160,7 +156,6 @@ public class Repl
         Console.Write(indent);
         Console.Write(marker);
         
-        // Print the node
         switch (node.Type)
         {
             case SyntaxTokenType.BinaryExpression: 

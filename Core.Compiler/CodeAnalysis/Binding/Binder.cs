@@ -101,7 +101,7 @@ public class Binder
     
     private IBoundStatement BindVariableStatement(VariableStatement syntax)
     {
-        string name = syntax.Variable.Text;
+        string name = syntax.Variable.Text ?? "undefined";
         TypeSymbol type = BindVarType(syntax.VarType);
         IBoundExpression expression = BindExpression(syntax.Expression);
         expression = TryConversion(syntax, expression, type);
@@ -140,7 +140,7 @@ public class Binder
         {
             if (type == TypeSymbol.Error)
             {
-                Errors.ReportInvalidType(syntax.VarType.TextSpan, syntax.VarType.Text);
+                Errors.ReportInvalidType(syntax.VarType.TextSpan, syntax.VarType.Text!);
                 return new ErrorBoundExpression();
             }
             Errors.ReportTypeConversionError(syntax.VarType.TextSpan, expression.Type.Name, type);
@@ -199,7 +199,7 @@ public class Binder
 
     private IBoundExpression BindAssignmentExpression(AssignmentExpression syntax)
     {
-        string name = syntax.VariableToken.Text;
+        string name = syntax.VariableToken.Text ?? "undefined";
         IBoundExpression expression = BindExpression(syntax.Expression);
         if (_scope!.GetVariable(name) is null)
         {
@@ -209,12 +209,12 @@ public class Binder
 
         VariableSymbol? variable = _scope.GetVariable(name);
 
-        return new AssignmentBoundExpression(variable, expression, syntax.Operator, syntax.IsCompoundOp);
+        return new AssignmentBoundExpression(variable!, expression, syntax.Operator, syntax.IsCompoundOp);
     }
 
     private IBoundExpression BindVariableExpression(VariableExpression syntax)
     {
-        string name = syntax.VariableToken.Text;
+        string name = syntax.VariableToken.Text ?? "undefined";
         VariableSymbol? variable = _scope!.GetVariable(name);
 
         if (variable is null)

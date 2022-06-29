@@ -1,6 +1,5 @@
 ﻿using Core.Compiler.CodeAnalysis.Errors;
 using Core.Compiler.CodeAnalysis.Lexer;
-using Core.Compiler.CodeAnalysis.Parser.Expressions;
 using Core.Compiler.CodeAnalysis.Parser.Statements;
 
 namespace Core.Compiler.CodeAnalysis.Parser;

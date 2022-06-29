@@ -2,7 +2,6 @@
 using Core.Compiler.CodeAnalysis.Symbols;
 
 namespace Core.Compiler.CodeAnalysis.Binding.Expressions;
-// Returns the value of the literal expression
 public class LiteralBoundExpression : IBoundExpression
 {
     public object Value { get; }

@@ -42,7 +42,6 @@ public class Parser
 
     public SyntaxTree Parse()
     {
-        // recursive decent parser
         StatementSyntax expression = ParseStatement();
         SyntaxToken eofToken = MatchToken(SyntaxTokenType.EofToken);
         return new SyntaxTree(expression, eofToken, _errors, _text);
@@ -50,8 +49,6 @@ public class Parser
 
     private StatementSyntax ParseStatement()
     {
-        
-        // parse function declaration
         if (Current.Type == SyntaxTokenType.VariableToken && Peek(1).Type == SyntaxTokenType.VariableToken &&
             Peek(2).Type == SyntaxTokenType.OpenParenToken)
         {

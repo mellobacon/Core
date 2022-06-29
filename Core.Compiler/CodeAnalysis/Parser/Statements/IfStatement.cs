@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Core.Compiler.CodeAnalysis.Binding;
-using Core.Compiler.CodeAnalysis.Binding.Statements;
 using Core.Compiler.CodeAnalysis.Lexer;
 using Core.Compiler.CodeAnalysis.Parser.Expressions;
 

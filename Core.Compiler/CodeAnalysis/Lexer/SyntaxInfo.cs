@@ -12,7 +12,6 @@ public static class SyntaxInfo
     }
     public static int GetBinaryPrecedence(SyntaxTokenType type)
     {
-        // follows pemdas
         return type switch
         {
             SyntaxTokenType.HatToken => 6,

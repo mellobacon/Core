@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Core.Compiler.CodeAnalysis.Symbols;
+﻿namespace Core.Compiler.CodeAnalysis.Symbols;
 
 public class ParameterSymbol : Symbol
 {
