@@ -106,7 +106,8 @@ public class Binder
         IBoundExpression expression = BindExpression(syntax.Expression);
         expression = TryConversion(syntax, expression, type);
         var variable = new VariableSymbol(name, type);
-        if (!_scope!.AddVariable(variable))
+        VariableSymbol? exists = _scope!.ParentScope?.GetVariable(name);
+        if (exists is not null || !_scope!.AddVariable(variable))
         {
             Errors.ReportVariableAlreadyExists(syntax.Variable.TextSpan, name);
         }
@@ -239,10 +240,21 @@ public class Binder
             args.Add(BindExpression(arg));
         }
 
-        FunctionSymbol? function = Functions.GetAll().First(f => f?.Name == syntax.Name.Text);
+        FunctionSymbol? function = Functions.GetAll().SingleOrDefault(f => f?.Name == syntax.Name.Text);
         if (function is null)
         {
-            // return function doesnt exist error
+            Errors.ReportFunctionNonExistent(syntax.Name.TextSpan ,syntax.Name.Text!);
+            return new ErrorBoundExpression();
+        }
+
+        if (function.Param.Length != syntax.Args.Count)
+        {
+            Errors.ReportInvalidArgCount(syntax.Name.TextSpan, syntax.Name.Text!, function.Param.Length, syntax.Args.Count);
+            return new ErrorBoundExpression();
+        }
+
+        if (Errors.Any())
+        {
             return new ErrorBoundExpression();
         }
 

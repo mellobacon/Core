@@ -5,7 +5,7 @@ namespace Core.Compiler.CodeAnalysis.Symbols;
 public class FunctionSymbol : Symbol
 {
     public readonly TypeSymbol FunctionType;
-    private ImmutableArray<ParameterSymbol> Param { get; }
+    public ImmutableArray<ParameterSymbol> Param { get; }
 
     public FunctionSymbol(string name, ImmutableArray<ParameterSymbol> param, TypeSymbol functionType) : base(name)
     {

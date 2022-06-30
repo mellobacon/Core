@@ -82,4 +82,16 @@ public class ErrorList
         var message = $"Error - Cannot convert {type} to {expectedType}";
         _errors.Add(new Error(span, message));
     }
+
+    public void ReportFunctionNonExistent(TextSpan span, string func)
+    {
+        var message = $"Error - the function {func} does not exist";
+        _errors.Add(new Error(span, message));
+    }
+
+    public void ReportInvalidArgCount(TextSpan span, string func, int expected, int actual)
+    {
+        var message = $"Error - function {func} takes {expected} param(s); got {actual} param(s) instead";
+        _errors.Add(new Error(span, message));
+    }
 }
