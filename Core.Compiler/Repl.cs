@@ -158,6 +158,11 @@ public class Repl
         
         switch (node.Type)
         {
+            case SyntaxTokenType.FunctionCallExpression:
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write(node.Type);
+                Console.ResetColor();
+                break;
             case SyntaxTokenType.BinaryExpression: 
             case SyntaxTokenType.UnaryExpression: 
             case SyntaxTokenType.AssignmentExpression:
@@ -166,6 +171,7 @@ public class Repl
                 Console.ResetColor();
                 break;
             case SyntaxTokenType.LiteralExpression:
+            case SyntaxTokenType.VariableToken:
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.Write(node.Type);
                 Console.ResetColor();
