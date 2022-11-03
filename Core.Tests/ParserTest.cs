@@ -150,7 +150,7 @@ public static class ParserTest
     [Fact]
     public static void Parser_Parses_Functions()
     {
-        StatementSyntax expression = ParseExpression("println(\"stuff\");");
+        StatementSyntax expression = ParseExpression("println(\"stuff\",\"stuff2\");");
         using var e = new AssertingNumerator(expression);
         e.AssertNode(SyntaxTokenType.ExpressionStatement);
             e.AssertNode(SyntaxTokenType.FunctionCallExpression);
@@ -158,6 +158,8 @@ public static class ParserTest
                 e.AssertToken(SyntaxTokenType.OpenParenToken, "(");
                 e.AssertNode(SyntaxTokenType.LiteralExpression);
                     e.AssertToken(SyntaxTokenType.StringToken, "\"stuff\"");
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.StringToken, "\"stuff2\"");
                 e.AssertToken(SyntaxTokenType.ClosedParenToken, ")");
             e.AssertToken(SyntaxTokenType.SemicolonToken, ";");
     }
@@ -165,7 +167,7 @@ public static class ParserTest
     [Fact]
     public static void Parser_Parses_IfStatement()
     {
-        StatementSyntax expression = ParseExpression("if (2 < 5) {} else {}");
+        StatementSyntax expression = ParseExpression("if (2 > 5) {} else if (2 < 5) {}");
         using var e = new AssertingNumerator(expression);
         e.AssertNode(SyntaxTokenType.IfStatement);
             e.AssertToken(SyntaxTokenType.IfKeyword, "if");
@@ -173,7 +175,7 @@ public static class ParserTest
             e.AssertNode(SyntaxTokenType.BinaryExpression);
                 e.AssertNode(SyntaxTokenType.LiteralExpression);
                     e.AssertToken(SyntaxTokenType.NumberToken, "2");
-                e.AssertToken(SyntaxTokenType.LessThanToken, "<");
+                e.AssertToken(SyntaxTokenType.MoreThanToken, ">");
                 e.AssertNode(SyntaxTokenType.LiteralExpression);
                     e.AssertToken(SyntaxTokenType.NumberToken, "5");
             e.AssertToken(SyntaxTokenType.ClosedParenToken, ")");
@@ -182,8 +184,52 @@ public static class ParserTest
                 e.AssertToken(SyntaxTokenType.ClosedBracketToken, "}");
             e.AssertNode(SyntaxTokenType.ElseStatement);
                 e.AssertToken(SyntaxTokenType.ElseKeyword, "else");
+                e.AssertNode(SyntaxTokenType.IfStatement);
+                    e.AssertToken(SyntaxTokenType.IfKeyword, "if");
+                    e.AssertToken(SyntaxTokenType.OpenParenToken, "(");
+                    e.AssertNode(SyntaxTokenType.BinaryExpression);
+                        e.AssertNode(SyntaxTokenType.LiteralExpression);
+                            e.AssertToken(SyntaxTokenType.NumberToken, "2");
+                        e.AssertToken(SyntaxTokenType.LessThanToken, "<");
+                        e.AssertNode(SyntaxTokenType.LiteralExpression);
+                            e.AssertToken(SyntaxTokenType.NumberToken, "5");
+                    e.AssertToken(SyntaxTokenType.ClosedParenToken, ")");
                 e.AssertNode(SyntaxTokenType.BlockStatement);
                     e.AssertToken(SyntaxTokenType.OpenBracketToken, "{");
                     e.AssertToken(SyntaxTokenType.ClosedBracketToken, "}");
+    }
+    
+    [Fact]
+    public static void Parser_Parses_ForStatement()
+    {
+        StatementSyntax expression = ParseExpression("for(let int x = 0; x < 2; x+=1){}");
+        using var e = new AssertingNumerator(expression);
+        e.AssertNode(SyntaxTokenType.ForStatement);
+            e.AssertToken(SyntaxTokenType.ForKeyword, "for");
+            e.AssertToken(SyntaxTokenType.OpenParenToken, "(");
+            e.AssertNode(SyntaxTokenType.VariableStatement);
+                e.AssertToken(SyntaxTokenType.VariableKeyword, "let");
+                e.AssertToken(SyntaxTokenType.VariableToken, "int");
+                e.AssertToken(SyntaxTokenType.VariableToken, "x");
+                e.AssertToken(SyntaxTokenType.EqualsToken, "=");
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.NumberToken, "0");
+                e.AssertToken(SyntaxTokenType.SemicolonToken, ";");
+            e.AssertNode(SyntaxTokenType.BinaryExpression);
+                e.AssertNode(SyntaxTokenType.VariableExpression);
+                    e.AssertToken(SyntaxTokenType.VariableToken, "x");
+                e.AssertToken(SyntaxTokenType.LessThanToken, "<");
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.NumberToken, "2");
+            e.AssertToken(SyntaxTokenType.SemicolonToken, ";");
+            e.AssertNode(SyntaxTokenType.AssignmentExpression);
+                e.AssertToken(SyntaxTokenType.VariableToken, "x");
+                e.AssertToken(SyntaxTokenType.PlusEqualsToken, "+=");
+                e.AssertNode(SyntaxTokenType.LiteralExpression);
+                    e.AssertToken(SyntaxTokenType.NumberToken, "1");
+            e.AssertToken(SyntaxTokenType.ClosedParenToken, ")");
+            e.AssertNode(SyntaxTokenType.BlockStatement);
+                e.AssertToken(SyntaxTokenType.OpenBracketToken, "{");
+                e.AssertToken(SyntaxTokenType.ClosedBracketToken, "}");
     }
 }

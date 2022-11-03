@@ -17,12 +17,6 @@ public class AssertingNumerator : IDisposable
         _enumerator = Flatten(node).GetEnumerator();
     }
 
-    private bool MarkFailed()
-    {
-        _hasErrors = true;
-        return false;
-    }
-
     // This gets all the nodes from the tree
     private static IEnumerable<SyntaxNode> Flatten(SyntaxNode node)
     {
@@ -43,36 +37,22 @@ public class AssertingNumerator : IDisposable
 
     public void AssertNode(SyntaxTokenType type)
     {
-        try
+        Assert.True(_enumerator.MoveNext());
+        if (_enumerator.Current != null)
         {
-            Assert.True(_enumerator.MoveNext());
-            if (_enumerator.Current != null)
-            {
-                Assert.Equal(type, _enumerator.Current.Type);
-                Assert.IsNotType<SyntaxToken>(_enumerator.Current);
-            }
-        }
-        catch when (MarkFailed())
-        {
-            throw;
+            Assert.Equal(type, _enumerator.Current.Type);
+            Assert.IsNotType<SyntaxToken>(_enumerator.Current);
         }
     }
     
     public void AssertToken(SyntaxTokenType type, string? text)
     {
-        try
+        Assert.True(_enumerator.MoveNext());
+        if (_enumerator.Current != null)
         {
-            Assert.True(_enumerator.MoveNext());
-            if (_enumerator.Current != null)
-            {
-                Assert.Equal(type, _enumerator.Current.Type);
-                var token = Assert.IsType<SyntaxToken>(_enumerator.Current);
-                Assert.Equal(text, token.Text);
-            }
-        }
-        catch when (MarkFailed())
-        {
-            throw;
+            Assert.Equal(type, _enumerator.Current.Type);
+            var token = Assert.IsType<SyntaxToken>(_enumerator.Current);
+            Assert.Equal(text, token.Text);
         }
     }
 

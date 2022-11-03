@@ -81,7 +81,7 @@ public static class EvaluatorTest
             ("100_", "Error - invalid token 100_"),
             ("-False;", "Error - bad unary operator - cant be applied to bool"),
             ("!100;", "Error - bad unary operator ! cant be applied to int"),
-            ("let void x = 10;", "Error - void is an invalid type"),
+            ("let dynamic x = 10;", "Error - dynamic is an invalid type"),
             ("let string x = 10;", "Error - Cannot convert int to string")
         };
         foreach ((string text, string error) in evals)
@@ -102,7 +102,7 @@ public static class EvaluatorTest
     [Fact]
     public static void Evaluator_Evaluates_IfElseStatement()
     {
-        string input = @"if (2 > 5) { ""2""; } else { ""3""; }";
+        const string input = @"{if (2 > 5) { ""2""; } else { ""3""; }}";
         Result result = GetResult(input);
         Assert.Equal("3", result.Value);
     }
@@ -110,15 +110,15 @@ public static class EvaluatorTest
     [Fact]
     public static void Evaluator_Evaluates_WhileStatement()
     {
-        string input = @"let int x = 0; while (x <= 3) { x += 1; }";
+        const string input = @"{let int x = 0; while (x < 3) { x += 1; }}";
         Result result = GetResult(input);
-        Assert.Null(result.Value);
+        Assert.Equal(3, result.Value);
     }
     
     [Fact]
     public static void Evaluator_Evaluates_ForStatement()
     {
-        string input = @"for (let int x = 0; x <= 3; x += 1) { print(x); }";
+        const string input = @"{for (let int x = 0; x < 3; x += 1) { print(x); }}";
         Result result = GetResult(input);
         Assert.Null(result.Value);
     }
